@@ -1,3 +1,16 @@
 spring:
   application:
     name: clima-api
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/clima_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: parde4
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        "[format_sql]": true
