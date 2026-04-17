@@ -2,23 +2,28 @@ name: CI - Clima API
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: [ "develop", "main", "feature/**" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Configurar Java
+      - name: Configurar Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
-      - name: Compilar proyecto
-        run: mvn clean install
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Ejecutar pruebas
+        run: ./mvnw clean test
+        
