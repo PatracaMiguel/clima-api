@@ -166,6 +166,7 @@ Este tipo de base de datos fue adecuado para el proyecto porque permite controla
 
 ## Modelo entidad-relación
 
+<img width="1205" height="443" alt="image" src="https://github.com/user-attachments/assets/d8c2b2a7-0ef9-4755-82ba-6381a0e4fc05" />
 
 
 El modelo está compuesto por tres tablas principales:
@@ -214,20 +215,6 @@ Campos principales:
 * `usuario_idusuario`
 
 Al igual que en `favorito`, la columna `usuario_idusuario` relaciona cada registro del historial con un usuario.
-
----
-
-Sí, **muy buen punto** 👌 — eso te sube nivel porque ya no solo ejecutas Docker, sino que explicas lo que hiciste.
-
-Ahorita tu sección está bien, pero está **incompleta**.
-Le falta mencionar la **imagen de MySQL que construyeron/configuraron**.
-
-Te dejo cómo deberías dejar esa parte 👇
-
----
-
-Perfecto, eso ya es otro nivel 👀🔥 porque estás usando **tu propia imagen en Docker Hub**.
-Te dejo cómo integrarlo bien en tu README de forma clara y natural:
 
 ---
 
