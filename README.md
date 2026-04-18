@@ -17,7 +17,8 @@ El sistema está diseñado bajo una arquitectura basada en servicios REST:
 * Cliente (Postman o frontend)
 * API REST: desarrollada con Spring Boot, procesa las solicitudes y genera respuestas
 * API externa (OpenWeatherMap): utilizada para obtener datos climáticos en tiempo real  
-* Contenedores Docker
+* Base de datos MYSQL
+* Contenedores Docker para la ejecución del entorno
 
 ---
 
@@ -33,36 +34,68 @@ El sistema está diseñado bajo una arquitectura basada en servicios REST:
 * Postman
 * OpenWeatherMap API
 
----
 
-## Variables de entorno
+## Tecnologías utilizadas
 
-El proyecto utiliza variables de entorno para proteger información sensible.
-
-Ejemplo de archivo `.env.example`:
-
-```
-OPENWEATHER_API_KEY=
-DB_URL=
-DB_USERNAME=
-DB_PASSWORD=
-```
+* Java 17
+* Spring Boot
+* Maven
+* MySQL
+* Docker y Docker Compose
+* Git & GitHub
+* GitHub Actions (CI/CD)
+* Postman
+* OpenWeatherMap API
 
 ---
 
+## Organización del trabajo por ramas
+
+Para el desarrollo del proyecto se utilizó una estrategia de trabajo por ramas en GitHub. Esto permitió que cada integrante implementara una funcionalidad específica sin afectar directamente el trabajo de los demás.
+
+### Ramas creadas
+
+* `develop`
+  Rama de integración del proyecto. Aquí se concentran los avances validados antes de pasar a una rama principal.
+
+* `feature/estructura-base`
+  Se utilizó para construir la estructura inicial del proyecto, incluyendo la base del backend y la organización principal del repositorio.
+
+* `feature/clima`
+  Creada para desarrollar la funcionalidad relacionada con la consulta de clima.
+
+* `feature/auth`
+  Destinada a la autenticación de usuarios.
+
+* `feature/recomendaciones`
+  Usada para implementar la generación de recomendaciones de vestimenta con base en el clima.
+
+* `feature/ci-cd`
+  Utilizada para configurar el pipeline de integración y despliegue continuo con GitHub Actions.
+
+* `feature/usuarios`
+  Creada para el desarrollo del módulo de usuarios, incluyendo endpoints para crear y consultar usuarios.
+
+* `feature/favoritos`
+  Utilizada para implementar la funcionalidad de favoritos, permitiendo registrar ciudades favoritas asociadas a un usuario.
+
+* `feature/conexion-openweathermap`
+  Enfocada en la integración con la API externa OpenWeatherMap.
+
+---
 ## Endpoints de la API
 
 ### Clima
 
 #### Obtener clima actual
 
-```
+```http
 GET /clima/{ciudad}
 ```
 
 #### Obtener clima extendido
 
-```
+```http
 GET /clima/{ciudad}/extendido
 ```
 
@@ -72,7 +105,7 @@ GET /clima/{ciudad}/extendido
 
 #### Obtener recomendaciones por ciudad
 
-```
+```http
 GET /recomendaciones/{ciudad}
 ```
 
@@ -80,32 +113,16 @@ GET /recomendaciones/{ciudad}
 
 ### Favoritos
 
-#### Agregar ciudad a favoritos
+#### Crear favorito
 
-```
-POST /usuarios/{id}/favoritos
-```
-
-#### Eliminar ciudad de favoritos
-
-```
-DELETE /usuarios/{id}/favoritos/{favoritoId}
+```http
+POST /favoritos
 ```
 
 #### Listar favoritos
 
-```
-GET /usuarios/{id}/favoritos
-```
-
----
-
-### Ciudades
-
-#### Buscar ciudades
-
-```
-GET /ciudades?nombre={nombre}
+```http
+GET /favoritos
 ```
 
 ---
@@ -114,13 +131,13 @@ GET /ciudades?nombre={nombre}
 
 #### Crear usuario
 
-```
+```http
 POST /usuarios
 ```
 
 #### Obtener usuario
 
-```
+```http
 GET /usuarios/{id}
 ```
 
@@ -128,63 +145,116 @@ GET /usuarios/{id}
 
 ## Base de datos
 
-El sistema utiliza MySQL para almacenar la información de usuarios, ciudades favoritas y un historial de consultas.
+El sistema utiliza **MySQL** como base de datos.
 
-### Tablas principales
+### ¿Por qué se utilizó MySQL?
 
-#### Usuario
+Se eligió MySQL porque el proyecto maneja información estructurada y relaciones claras entre entidades. En este caso, los usuarios se relacionan con sus favoritos y con su historial de consultas, lo cual encaja mejor en un modelo relacional.
 
-Almacena la información de los usuarios del sistema.
+Esto significa que:
 
-* idusuario
-* nombre
-* correo
-* contraseña
-* fecha_creado
+* La información se organiza en tablas
+* Cada tabla contiene filas y columnas
+* Las tablas pueden relacionarse entre sí mediante claves primarias y foráneas
 
----
+Este tipo de base de datos fue adecuado para el proyecto porque permite controlar relaciones como:
 
-#### Favorito
-
-Guarda las ciudades favoritas de cada usuario.
-
-* idfavorito
-* ciudad
-* pais
-* fecha_agregado
-* usuario_idusuario
+* un usuario puede tener muchos favoritos
+* un usuario puede tener muchos registros en su historial
 
 ---
 
-#### Historial
+## Modelo entidad-relación
 
-Registra las consultas de clima realizadas por los usuarios.
 
-* idhistorial
-* ciudad
-* fecha_consulta
-* usuario_idusuario
+
+El modelo está compuesto por tres tablas principales:
+
+### 1. Usuario
+
+La tabla `usuario` representa a cada usuario registrado en el sistema.
+
+Campos principales:
+
+* `idusuario`
+* `nombre`
+* `correo`
+* `contraseña`
+* `fecha_creado`
+
+Esta es la entidad principal del sistema.
 
 ---
 
-### Relaciones
+### 2. Favorito
 
-* Un usuario puede tener múltiples ciudades favoritas
-* Un usuario puede tener múltiples registros en el historial
+La tabla `favorito` almacena las ciudades favoritas guardadas por los usuarios.
 
-Estas relaciones se implementan mediante llaves foráneas.
+Campos principales:
+
+* `idfavorito`
+* `ciudad`
+* `pais`
+* `fecha_agregado`
+* `usuario_idusuario`
+
+La columna `usuario_idusuario` funciona como clave foránea y conecta cada favorito con un usuario.
 
 ---
 
-## Ejecución con Docker
+### 3. Historial
 
-### Construir y levantar contenedores
+La tabla `historial` registra las consultas de clima realizadas por los usuarios.
 
-```bash
-docker compose up --build
+Campos principales:
+
+* `idhistorial`
+* `ciudad`
+* `fecha_consulta`
+* `usuario_idusuario`
+
+Al igual que en `favorito`, la columna `usuario_idusuario` relaciona cada registro del historial con un usuario.
+
+---
+
+Sí, **muy buen punto** 👌 — eso te sube nivel porque ya no solo ejecutas Docker, sino que explicas lo que hiciste.
+
+Ahorita tu sección está bien, pero está **incompleta**.
+Le falta mencionar la **imagen de MySQL que construyeron/configuraron**.
+
+Te dejo cómo deberías dejar esa parte 👇
+
+---
+
+Perfecto, eso ya es otro nivel 👀🔥 porque estás usando **tu propia imagen en Docker Hub**.
+Te dejo cómo integrarlo bien en tu README de forma clara y natural:
+
+---
+
+## 🐳 Ejecución con Docker
+
+### Levantar la base de datos con imagen personalizada
+
+Para ejecutar la base de datos se utilizó una imagen personalizada subida a Docker Hub.
+
+### Comandos
+
+```
+docker pull elisasc/clima-db
+docker rm -f clima_db
+docker run -d -p 3306:3306 --name clima_db elisasc/clima-db
 ```
 
 ---
+
+## Imagen de la base de datos
+
+Se creó una imagen personalizada basada en MySQL que incluye:
+
+* Creación automática de la base de datos `clima_app`
+* Configuración de credenciales
+* Ejecución del script inicial `ClimaApp.sql`
+* Estructura de tablas (`usuario`, `favorito`, `historial`)
 
 ## Pipeline CI/CD
 
@@ -196,16 +266,28 @@ El proyecto utiliza GitHub Actions para automatizar:
 
 Cada push al repositorio ejecuta automáticamente el pipeline.
 
----
-
 ## Estructura del proyecto
 
+El proyecto sigue una arquitectura por capas de Spring Boot, permitiendo separar responsabilidades y mantener el código organizado.
+
 ```
-mi-api/
-├── .github/workflows/
+clima-api/
 ├── src/
-├── Dockerfile
-├── docker-compose.yml
-├── .env.example
+│   ├── main/java/com/parde4/climaapi/
+│   │   ├── controller/  
+│   │   ├── dto/            
+│   │   ├── exception/     
+│   │   ├── model/          
+│   │   ├── repository/   
+│   │   ├── service/        
+│   │   └── ClimaApiApplication.java 
+│   │
+│   ├── resources/
+│   │   └── application.yaml 
+│
+│   ├── test/              
+│
+├── docker-compose.yml     
+├── pom.xml          
 ├── README.md
 ```
