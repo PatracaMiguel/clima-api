@@ -33,20 +33,6 @@ El sistema está diseñado bajo una arquitectura basada en servicios REST:
 * GitHub Actions (CI/CD)
 * Postman
 * OpenWeatherMap API
-
-
-## Tecnologías utilizadas
-
-* Java 17
-* Spring Boot
-* Maven
-* MySQL
-* Docker y Docker Compose
-* Git & GitHub
-* GitHub Actions (CI/CD)
-* Postman
-* OpenWeatherMap API
-
 ---
 
 ## Organización del trabajo por ramas
