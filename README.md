@@ -152,8 +152,7 @@ Este tipo de base de datos fue adecuado para el proyecto porque permite controla
 
 ## Modelo entidad-relación
 
-<img width="1205" height="443" alt="image" src="https://github.com/user-attachments/assets/d8c2b2a7-0ef9-4755-82ba-6381a0e4fc05" />
-
+<img width="706" height="245" alt="Captura de pantalla 2026-04-19 a la(s) 21 32 59" src="https://github.com/user-attachments/assets/7d39a75e-abb8-409b-bb4d-860857c9e711" />
 
 El modelo está compuesto por tres tablas principales:
 
