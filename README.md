@@ -12,13 +12,13 @@ Además, permite a los usuarios registrarse, iniciar sesión, guardar ciudades f
 
 ## Arquitectura del sistema
 
-El sistema está diseñado bajo una arquitectura basada en servicios REST:
+El sistema utiliza una arquitectura en capas y expone sus funcionalidades mediante una API REST.
+Capa de presentación recibe las peticiones , valida los datos y devuelve una respuesta 
+Capa de negocio: ceontrola todo el comportamiento del sistema  
+Capa de persistencia: acceso a la BD
+OpenWeatherMap: servicio externo integrado en la capa de negocio
 
-* Cliente (Postman o frontend)
-* API REST: desarrollada con Spring Boot, procesa las solicitudes y genera respuestas
-* API externa (OpenWeatherMap): utilizada para obtener datos climáticos en tiempo real  
-* Base de datos MYSQL
-* Contenedores Docker para la ejecución del entorno
+<img width="561" height="738" alt="image" src="https://github.com/user-attachments/assets/98ab04f5-65d7-417a-bec2-0dbeb1750a9c" />
 
 ---
 
