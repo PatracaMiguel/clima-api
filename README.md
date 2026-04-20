@@ -13,10 +13,10 @@ Además, permite a los usuarios registrarse, iniciar sesión, guardar ciudades f
 ## Arquitectura del sistema
 
 El sistema utiliza una arquitectura en capas y expone sus funcionalidades mediante una API REST.
-Capa de presentación recibe las peticiones , valida los datos y devuelve una respuesta 
-Capa de negocio: ceontrola todo el comportamiento del sistema  
-Capa de persistencia: acceso a la BD
-OpenWeatherMap: servicio externo integrado en la capa de negocio
+* Capa de presentación recibe las peticiones , valida los datos y devuelve una respuesta 
+* Capa de negocio: controla todo el comportamiento del sistema  
+* Capa de persistencia: acceso a la BD
+* OpenWeatherMap: servicio externo integrado en la capa de negocio
 
 <img width="561" height="738" alt="image" src="https://github.com/user-attachments/assets/98ab04f5-65d7-417a-bec2-0dbeb1750a9c" />
 
