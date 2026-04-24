@@ -1,13 +1,13 @@
 package com.parde4.climaapi.service;
 
-import com.parde4.climaapi.model.Usuario;
-import com.parde4.climaapi.repository.UsuarioRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.time.LocalDateTime;
+import com.parde4.climaapi.model.Usuario;
+import com.parde4.climaapi.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
