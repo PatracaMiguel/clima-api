@@ -1,0 +1,13 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package com.parde4.climaapi;
+
+import org.junit.jupiter.api.Test;
+
+class ClimaApiApplicationTests {
+   ClimaApiApplicationTests() {
+   }
+
+   @Test
+   void contextLoads() {
+   }
+}
