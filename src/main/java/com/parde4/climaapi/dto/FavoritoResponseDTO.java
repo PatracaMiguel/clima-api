@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class FavoritoResponseDTO {
-    private Long id;
+    private Integer  id;
     private String ciudad;
     private String pais;
     private LocalDateTime fechaAgregado;
-    private Long usuarioId;
+    private Integer  usuarioId;
 
 }

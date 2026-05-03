@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class UsuarioResponseDTO {
 
-    private Long id;
+    private Integer  id;
     private String nombre;
     private String correo;
     private LocalDateTime fechaCreado;

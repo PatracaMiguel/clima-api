@@ -19,11 +19,11 @@ public class FavoritoService {
         return favoritoRepository.save(favorito);
     }
 
-    public List<Favorito> listarPorUsuario(Long usuarioId){
+    public List<Favorito> listarPorUsuario(Integer  usuarioId){
         return favoritoRepository.findByUsuarioId(usuarioId);
     }
 
-    public void eliminar(Long id){
+    public void eliminar(Integer  id){
         favoritoRepository.deleteById(id);
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.parde4.climaapi.model.Favorito;
 
 
-public interface FavoritoRepository extends JpaRepository<Favorito, Long>{
-    List<Favorito> findByUsuarioId(Long usuarioId);
+public interface FavoritoRepository extends JpaRepository<Favorito, Integer >{
+    List<Favorito> findByUsuarioId(Integer  usuarioId);
 }
