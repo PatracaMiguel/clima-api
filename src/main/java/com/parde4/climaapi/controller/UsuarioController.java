@@ -32,7 +32,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public UsuarioResponseDTO obtenerUsuario(@PathVariable Long id) {
+    public UsuarioResponseDTO obtenerUsuario(@PathVariable Integer  id) {
 
         Usuario usuario = usuarioService.obtenerUsuario(id);
 
@@ -54,7 +54,7 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public UsuarioResponseDTO actualizarUsuario(
-        @PathVariable Long id,
+        @PathVariable Integer  id,
         @RequestBody @Valid UsuarioUpdateDTO dto) {
 
     Usuario usuario = new Usuario();

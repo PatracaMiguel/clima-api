@@ -36,7 +36,7 @@ class UsuarioControllerTest {
     @DisplayName("Debe crear usuario")
     void crearUsuario() throws Exception {
         Usuario usuario = new Usuario();
-        usuario.setId(1L);
+        usuario.setId((int) 1);
         usuario.setNombre("Miguel");
         usuario.setCorreo("miguel@gmail.com");
         usuario.setContrasena("123456");
@@ -65,12 +65,12 @@ class UsuarioControllerTest {
     @DisplayName("Debe obtener usuario por id")
     void obtenerUsuario() throws Exception {
         Usuario usuario = new Usuario();
-        usuario.setId(1L);
+        usuario.setId((int) 1);
         usuario.setNombre("Miguel");
         usuario.setCorreo("miguel@gmail.com");
         usuario.setFechaCreado(LocalDateTime.now());
 
-        when(usuarioService.obtenerUsuario(1L)).thenReturn(usuario);
+        when(usuarioService.obtenerUsuario((int) 1)).thenReturn(usuario);
 
         mockMvc.perform(get("/usuarios/1"))
                 .andExpect(status().isOk())
@@ -83,12 +83,12 @@ class UsuarioControllerTest {
     @DisplayName("Debe actualizar usuario")
     void actualizarUsuario() throws Exception {
         Usuario usuario = new Usuario();
-        usuario.setId(1L);
+        usuario.setId((int) 1);
         usuario.setNombre("Actualizado");
         usuario.setCorreo("nuevo@gmail.com");
         usuario.setFechaCreado(LocalDateTime.now());
 
-        when(usuarioService.actualizarUsuario(eq(1L), any(Usuario.class))).thenReturn(usuario);
+        when(usuarioService.actualizarUsuario((int) eq(1), any(Usuario.class))).thenReturn(usuario);
 
         String body = """
         {
