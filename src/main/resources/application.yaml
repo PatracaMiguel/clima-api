@@ -3,7 +3,7 @@ spring:
     name: clima-api
 
   datasource:
-    url: jdbc:mysql://localhost:3307/clima_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3307/clima_app?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: parde4
 
@@ -17,4 +17,4 @@ spring:
 
 openweathermap:
   api-url: https://api.openweathermap.org/data/2.5
-  api-key: ${WEATHER_API_KEY}
+  api-key: aaa1b2d610dbc18cbacdf4c32273c324

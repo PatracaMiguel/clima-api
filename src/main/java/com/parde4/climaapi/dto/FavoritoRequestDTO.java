@@ -14,6 +14,6 @@ public class FavoritoRequestDTO {
     private String pais;
 
     @NotNull(message = "El usuario es obligatorio")
-    private Long usuarioId;
+    private Integer usuarioId;
 
 }

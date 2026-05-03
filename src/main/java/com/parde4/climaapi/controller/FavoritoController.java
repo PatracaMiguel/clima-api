@@ -38,12 +38,12 @@ public class FavoritoController {
     }
 
     @GetMapping("/usuario/{id}")
-    public List<FavoritoResponseDTO> listar(@PathVariable Long id) {
+    public List<FavoritoResponseDTO> listar(@PathVariable Integer id) {
         return favoritoService.listarPorUsuario(id).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable Integer id) {
         favoritoService.eliminar(id);
     }
 

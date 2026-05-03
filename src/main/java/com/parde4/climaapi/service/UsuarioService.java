@@ -26,12 +26,12 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario obtenerUsuario(Long id) {
+    public Usuario obtenerUsuario(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         return usuario.orElse(null);
     }
 
-    public Usuario actualizarUsuario(Long id, Usuario datosActualizados) {
+    public Usuario actualizarUsuario(Integer id, Usuario datosActualizados) {
 
     Usuario usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

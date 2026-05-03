@@ -24,7 +24,7 @@ public class Favorito{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idfavorito" )
-    private Long id;
+    private Integer id;
 
     @Column(name = "ciudad", nullable = false, length = 45)
     private String ciudad;
@@ -36,6 +36,6 @@ public class Favorito{
     private LocalDateTime fechaAgregado;
 
     @Column(name = "usuario_idusuario")
-    private Long usuarioId;
+    private Integer usuarioId;
 
 }

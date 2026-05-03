@@ -38,11 +38,11 @@ class FavoritoControllerTest {
     @DisplayName("Debe crear favorito")
     void crearFavorito() throws Exception {
         Favorito favorito = new Favorito();
-        favorito.setId(1L);
+        favorito.setId(1);
         favorito.setCiudad("Coatzacoalcos");
         favorito.setPais("Mexico");
         favorito.setFechaAgregado(LocalDateTime.now());
-        favorito.setUsuarioId(1L);
+        favorito.setUsuarioId(1);
 
         when(favoritoService.guardar(any(Favorito.class))).thenReturn(favorito);
 
@@ -68,13 +68,13 @@ class FavoritoControllerTest {
     @DisplayName("Debe listar favoritos por usuario")
     void listarFavoritosPorUsuario() throws Exception {
         Favorito favorito = new Favorito();
-        favorito.setId(1L);
+        favorito.setId(1);
         favorito.setCiudad("Coatzacoalcos");
         favorito.setPais("Mexico");
         favorito.setFechaAgregado(LocalDateTime.now());
-        favorito.setUsuarioId(1L);
+        favorito.setUsuarioId(1);
 
-        when(favoritoService.listarPorUsuario(1L)).thenReturn(List.of(favorito));
+        when(favoritoService.listarPorUsuario(1)).thenReturn(List.of(favorito));
 
         mockMvc.perform(get("/favoritos/usuario/1"))
                 .andExpect(status().isOk())
@@ -87,7 +87,7 @@ class FavoritoControllerTest {
     @Test
     @DisplayName("Debe eliminar favorito")
     void eliminarFavorito() throws Exception {
-        doNothing().when(favoritoService).eliminar(1L);
+        doNothing().when(favoritoService).eliminar(1);
 
         mockMvc.perform(delete("/favoritos/1"))
                 .andExpect(status().isOk());
