@@ -3,7 +3,7 @@ spring:
     name: clima-api
 
   datasource:
-    url: jdbc:mysql://localhost:3307/clima_app?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3307/clima_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: parde4
 
