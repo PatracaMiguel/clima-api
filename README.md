@@ -226,7 +226,7 @@ Para ejecutar la base de datos se utilizó una imagen personalizada subida a Doc
 ```
 docker pull elisasc/clima-db
 docker rm -f clima_db
-docker run -d -p 3306:3306 --name clima_db elisasc/clima-db
+docker run -d -p 3307:3306 --name clima_db elisasc/clima-db
 ```
 
 ---
@@ -275,3 +275,6 @@ clima-api/
 ├── pom.xml          
 ├── README.md
 ```
+
+## Imagen en DockerHub
+https://hub.docker.com/layers/rogeeers/clima_api/latest/images/sha256-2bca61ac539e600b847fedda0bc6e862ad95af3192cdfe4189503ed2cb952566
