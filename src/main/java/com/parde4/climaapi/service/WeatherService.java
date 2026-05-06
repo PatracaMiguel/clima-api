@@ -1,6 +1,7 @@
 package com.parde4.climaapi.service;
 
 import com.parde4.climaapi.dto.WeatherResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +18,11 @@ public class WeatherService {
 
     private final RestTemplate restTemplate;
 
+    @Autowired
+    private HistorialService historialService;
+
     public WeatherService() {
-        this.restTemplate = new RestTemplate(); 
+        this.restTemplate = new RestTemplate();
     }
 
     public WeatherResponseDTO obtenerClimaPorCiudad(String ciudad) {
@@ -26,10 +30,16 @@ public class WeatherService {
                 .path("/weather")
                 .queryParam("q", ciudad)
                 .queryParam("appid", apiKey)
-                .queryParam("units", "metric") 
-                .queryParam("lang", "es")      
+                .queryParam("units", "metric")
+                .queryParam("lang", "es")
                 .toUriString();
 
-        return restTemplate.getForObject(url, WeatherResponseDTO.class);
+        WeatherResponseDTO response = restTemplate.getForObject(url, WeatherResponseDTO.class);
+
+        if (response != null && response.getMain() != null) {
+            historialService.guardar(ciudad, response.getMain().getTemp());
+        }
+
+        return response;
     }
 }
