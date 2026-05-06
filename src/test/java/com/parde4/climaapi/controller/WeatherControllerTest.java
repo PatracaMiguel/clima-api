@@ -42,8 +42,7 @@ public class WeatherControllerTest {
         when(weatherService.obtenerClimaPorCiudad("Veracruz")).thenReturn(mockResponse);
 
         // 2. Ejecutar la petición y 3. Validar los resultados
-        mockMvc.perform(get("/clima")
-                .param("ciudad", "Veracruz"))
+        mockMvc.perform(get("/clima/Veracruz"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.main.temp").value(25.0))
                 .andExpect(jsonPath("$.weather[0].description").value("cielo claro"));
