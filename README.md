@@ -89,7 +89,7 @@ GET /clima/{ciudad}/extendido
 
 ### Recomendaciones
 
-#### Obtener recomendaciones por ciudad
+#### Obtener recomendaciones de vestimenta según el clima de una ciudad.
 
 ```http
 GET /recomendaciones/{ciudad}
@@ -128,6 +128,20 @@ GET /usuarios/{id}
 ```
 
 ---
+## Historial de consultas
+
+El sistema guarda automáticamente un historial de las consultas climáticas realizadas.
+
+Cada vez que se consulta:
+
+GET /clima/{ciudad}
+
+se almacena:
+
+- ciudad consultada
+- temperatura obtenida
+- fecha y hora de consulta
+
 
 ## Base de datos
 
@@ -135,9 +149,7 @@ El sistema utiliza **MySQL** como base de datos.
 
 ### ¿Por qué se utilizó MySQL?
 
-Se eligió MySQL porque el proyecto maneja información estructurada y relaciones claras entre entidades. En este caso, los usuarios se relacionan con sus favoritos y con su historial de consultas, lo cual encaja mejor en un modelo relacional.
-
-Esto significa que:
+Se eligió MySQL porque el proyecto maneja información estructurada y relaciones claras entre entidades. En este caso, los usuarios se relacionan con sus favoritos y con su historial de consultas.
 
 * La información se organiza en tablas
 * Cada tabla contiene filas y columnas
