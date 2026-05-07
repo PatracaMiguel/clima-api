@@ -1,5 +1,6 @@
 package com.parde4.climaapi.controller;
 
+import com.parde4.climaapi.dto.PronosticoResponseDTO;
 import com.parde4.climaapi.dto.WeatherResponseDTO;
 import com.parde4.climaapi.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,10 @@ public class WeatherController {
     @GetMapping("/{ciudad}")
     public WeatherResponseDTO obtenerClima(@PathVariable String ciudad) {
         return weatherService.obtenerClimaPorCiudad(ciudad);
+    }
+
+    @GetMapping("/{ciudad}/pronostico")
+    public PronosticoResponseDTO obtenerPronostico(@PathVariable String ciudad) {
+        return weatherService.obtenerPronosticoPorCiudad(ciudad);
     }
 }
