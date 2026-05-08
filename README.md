@@ -277,4 +277,4 @@ clima-api/
 ```
 
 ## Imagen en DockerHub
-https://hub.docker.com/repository/docker/patracamiguel/clima-api/tags/latest/sha256-807e120f3aa9a3e1b383312a4b10b53db294fad909e61c06d9bdbf07933238f4
+https://hub.docker.com/repositories/patracamiguel
