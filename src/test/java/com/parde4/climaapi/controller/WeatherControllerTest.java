@@ -40,7 +40,7 @@ public class WeatherControllerTest {
         weatherData.setDescription("cielo claro");
         mockResponse.setWeather(List.of(weatherData));
 
-        when(weatherService.obtenerClimaPorCiudad("Veracruz")).thenReturn(mockResponse);
+        when(weatherService.obtenerClimaPorCiudad("Veracruz" , null)).thenReturn(mockResponse);
 
         // 2. Ejecutar la petición y 3. Validar los resultados
         mockMvc.perform(get("/clima/Veracruz"))

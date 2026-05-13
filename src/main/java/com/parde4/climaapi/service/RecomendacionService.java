@@ -13,7 +13,7 @@ public class RecomendacionService {
 
     public RecomendacionResponseDTO recomendarClimaCiudad(String ciudad) {
 
-        WeatherResponseDTO climaCiudad = weatherService.obtenerClimaPorCiudad(ciudad);
+        WeatherResponseDTO climaCiudad = weatherService.obtenerClimaPorCiudad(ciudad , null);
 
         double temperatura = climaCiudad.getMain().getTemp();
         String clima = climaCiudad.getWeather().get(0).getMain();

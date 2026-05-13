@@ -31,7 +31,7 @@ public class WeatherService {
         this.restTemplate = new RestTemplate();
     }
 
-    public WeatherResponseDTO obtenerClimaPorCiudad(String ciudad) {
+    public WeatherResponseDTO obtenerClimaPorCiudad(String ciudad , Integer usuarioId) {
         String url = UriComponentsBuilder.fromUriString(apiUrl)
                 .path("/weather")
                 .queryParam("q", ciudad)
@@ -43,9 +43,8 @@ public class WeatherService {
         WeatherResponseDTO response = restTemplate.getForObject(url, WeatherResponseDTO.class);
 
         if (response != null && response.getMain() != null) {
-            historialService.guardar(ciudad, response.getMain().getTemp());
+            historialService.guardar(ciudad, response.getMain().getTemp() , usuarioId);
         }
-
         return response;
     }
 
