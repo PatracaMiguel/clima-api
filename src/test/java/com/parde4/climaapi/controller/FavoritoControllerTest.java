@@ -87,7 +87,7 @@ class FavoritoControllerTest {
     @Test
     @DisplayName("Debe eliminar favorito")
     void eliminarFavorito() throws Exception {
-        doNothing().when(favoritoService).eliminar(1);
+        doNothing().when(favoritoService).eliminar(1 , 1);
 
         mockMvc.perform(delete("/favoritos/1"))
                 .andExpect(status().isOk());

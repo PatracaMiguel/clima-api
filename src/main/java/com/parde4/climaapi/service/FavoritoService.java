@@ -23,7 +23,7 @@ public class FavoritoService {
         return favoritoRepository.findByUsuarioId(usuarioId);
     }
 
-    public void eliminar(Integer id){
+    public void eliminar(Integer id , Integer usuarioId){
         favoritoRepository.deleteById(id);
     }
 }

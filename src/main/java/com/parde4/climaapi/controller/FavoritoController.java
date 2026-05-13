@@ -4,19 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.parde4.climaapi.dto.FavoritoRequestDTO;
 import com.parde4.climaapi.dto.FavoritoResponseDTO;
 import com.parde4.climaapi.model.Favorito;
 import com.parde4.climaapi.service.FavoritoService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,24 +22,47 @@ public class FavoritoController {
     private FavoritoService favoritoService;
 
     @PostMapping
-    public FavoritoResponseDTO guardar(@RequestBody @Valid FavoritoRequestDTO dto) {
+    public FavoritoResponseDTO guardar(@RequestBody @Valid FavoritoRequestDTO dto, HttpSession session) {
+
+        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
+
+        if (usuarioId == null) {
+            throw new RuntimeException("Debe iniciar sesión antes de guardar favoritos");
+        }
 
         Favorito favorito = new Favorito();
         favorito.setCiudad(dto.getCiudad());
         favorito.setPais(dto.getPais());
-        favorito.setUsuarioId(dto.getUsuarioId());
+        favorito.setUsuarioId(usuarioId);
 
         return mapToDTO(favoritoService.guardar(favorito));
     }
 
-    @GetMapping("/usuario/{id}")
-    public List<FavoritoResponseDTO> listar(@PathVariable Integer id) {
-        return favoritoService.listarPorUsuario(id).stream().map(this::mapToDTO).collect(Collectors.toList());
+    @GetMapping
+    public List<FavoritoResponseDTO> listar(HttpSession session) {
+
+        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
+
+        if (usuarioId == null) {
+            throw new RuntimeException("Debe iniciar sesión antes de ver favoritos");
+        }
+
+        return favoritoService.listarPorUsuario(usuarioId)
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id) {
-        favoritoService.eliminar(id);
+    public void eliminar(@PathVariable Integer id, HttpSession session) {
+
+        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
+
+        if (usuarioId == null) {
+            throw new RuntimeException("Debe iniciar sesión antes de eliminar favoritos");
+        }
+
+        favoritoService.eliminar(id, usuarioId);
     }
 
     private FavoritoResponseDTO mapToDTO(Favorito favorito) {
