@@ -11,4 +11,5 @@ public class UsuarioResponseDTO {
     private String nombre;
     private String correo;
     private LocalDateTime fechaCreado;
+    private String mensaje;
 }

@@ -16,6 +16,7 @@ public class FavoritoService {
 
     public Favorito guardar(Favorito favorito){
         favorito.setFechaAgregado(LocalDateTime.now());
+        
         return favoritoRepository.save(favorito);
     }
 

@@ -1,6 +1,8 @@
 package com.parde4.climaapi.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class FavoritoController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id, HttpSession session) {
+    public Map<String, Object> eliminar(@PathVariable Integer id, HttpSession session) {
 
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
@@ -63,6 +65,10 @@ public class FavoritoController {
         }
 
         favoritoService.eliminar(id, usuarioId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", "Favorito eliminado correctamente");
+        return response;
     }
 
     private FavoritoResponseDTO mapToDTO(Favorito favorito) {
@@ -74,6 +80,7 @@ public class FavoritoController {
         dto.setPais(favorito.getPais());
         dto.setUsuarioId(favorito.getUsuarioId());
         dto.setFechaAgregado(favorito.getFechaAgregado());
+        dto.setMensaje("Favorito guardado correctamente");
 
         return dto;
     }

@@ -23,6 +23,16 @@ public class HistorialService {
     }
 
     public java.util.List<Historial> obtenerPorUsuario(Integer usuarioId) {
-        return historialRepository.findByUsuarioId(usuarioId);
+        return historialRepository.findByUsuarioIdAndDeletedAtIsNull(usuarioId);
     }
+
+    public void eliminarHistorialPorUsuario(Integer usuarioId) {
+
+    java.util.List<Historial> historial =
+            historialRepository.findByUsuarioIdAndDeletedAtIsNull(usuarioId);
+
+    historial.forEach(item -> item.setDeletedAt(LocalDateTime.now()));
+
+    historialRepository.saveAll(historial);
+}
 }

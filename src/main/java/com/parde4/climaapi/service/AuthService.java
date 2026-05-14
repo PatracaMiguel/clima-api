@@ -17,11 +17,8 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
 
-        Usuario usuario = usuarioRepository.findByCorreo(request.getCorreo());
-
-        if (usuario == null) {
-            throw new RuntimeException("El correo no está registrado");
-        }
+        Usuario usuario = usuarioRepository.findByCorreoAndDeletedAtIsNull(request.getCorreo())
+                .orElseThrow(() -> new RuntimeException("El correo no está registrado"));
 
         if (!usuario.getContrasena().equals(request.getContrasena())) {
             throw new RuntimeException("La contraseña es incorrecta");

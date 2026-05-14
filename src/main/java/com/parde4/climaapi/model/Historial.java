@@ -30,4 +30,7 @@ public class Historial {
 
     @Column(name = "usuario_idusuario")
     private Integer usuarioId;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

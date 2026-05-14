@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/historial")
@@ -26,5 +28,22 @@ public class HistorialController {
         }
 
         return historialService.obtenerPorUsuario(usuarioId);
+    }
+
+    @DeleteMapping
+    public Map<String, String> eliminarHistorial(HttpSession session) {
+
+        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
+
+        if (usuarioId == null) {
+            throw new RuntimeException("Debe iniciar sesión antes de eliminar el historial");
+        }
+
+        historialService.eliminarHistorialPorUsuario(usuarioId);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Historial eliminado correctamente");
+
+        return response;
     }
 }

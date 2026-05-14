@@ -1,7 +1,6 @@
 package com.parde4.climaapi.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,8 @@ public class UsuarioService {
 
     public Usuario crearUsuario(Usuario usuario) {
 
-        if (usuarioRepository.findByCorreo(usuario.getCorreo()) != null) {
+        if (usuarioRepository.findByCorreoAndDeletedAtIsNull(usuario.getCorreo()).isPresent()) {
             throw new RuntimeException("El correo ya está registrado");
-            
         }
 
         usuario.setFechaCreado(LocalDateTime.now());
@@ -27,24 +25,35 @@ public class UsuarioService {
     }
 
     public Usuario obtenerUsuario(Integer id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElse(null);
+        return usuarioRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
     public Usuario actualizarUsuario(Integer id, Usuario datosActualizados) {
 
-    Usuario usuario = usuarioRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    Usuario existente = usuarioRepository.findByCorreo(datosActualizados.getCorreo());
-    if (existente != null && !existente.getId().equals(id)) {
-        throw new RuntimeException("El correo ya está registrado");
+        usuarioRepository.findByCorreoAndDeletedAtIsNull(datosActualizados.getCorreo())
+                .ifPresent(existente -> {
+                    if (!existente.getId().equals(id)) {
+                        throw new RuntimeException("El correo ya está registrado");
+                    }
+                });
+
+        usuario.setNombre(datosActualizados.getNombre());
+        usuario.setCorreo(datosActualizados.getCorreo());
+        usuario.setContrasena(datosActualizados.getContrasena());
+
+        return usuarioRepository.save(usuario);
     }
 
-    usuario.setNombre(datosActualizados.getNombre());
-    usuario.setCorreo(datosActualizados.getCorreo());
-    usuario.setContrasena(datosActualizados.getContrasena());
+    public void eliminarUsuario(Integer id) {
 
-    return usuarioRepository.save(usuario);
+        Usuario usuario = usuarioRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setDeletedAt(LocalDateTime.now());
+        usuarioRepository.save(usuario);
     }
 }
