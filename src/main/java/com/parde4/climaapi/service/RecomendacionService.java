@@ -31,7 +31,7 @@ public class RecomendacionService {
 
         if (clima.equalsIgnoreCase("Rain")) {
         ropa = "Se recomienda usar impermeable o chamarra resistente al agua, pantalón de secado rápido y zapatos con suela antideslizante";
-        accesorios = "Lleve sombrilla, mochila impermeabl, cubrezapatos y una bolsa plástica para proteger celular o documentos si lleva alguno";
+        accesorios = "Lleve sombrilla, mochila impermeable, cubrezapatos y una bolsa plástica para proteger celular o documentos si lleva alguno";
         mensajeClima = "Está lloviendo afuera , salga con tiempo y evita zonas encharcadas ";
         } 
         else if (clima.equalsIgnoreCase("Thunderstorm")) {

@@ -32,7 +32,13 @@ public class WeatherController {
     }
 
     @GetMapping("/{ciudad}/pronostico")
-    public PronosticoResponseDTO obtenerPronostico(@PathVariable String ciudad) {
+    public PronosticoResponseDTO obtenerPronostico(@PathVariable String ciudad , HttpSession session) {
+
+        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
+
+        if (usuarioId == null) {
+            throw new RuntimeException("Debe iniciar sesión antes de consultar el clima");
+        }
         return weatherService.obtenerPronosticoPorCiudad(ciudad);
     }
 }
