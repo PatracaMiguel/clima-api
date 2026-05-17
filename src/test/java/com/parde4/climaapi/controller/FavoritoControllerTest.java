@@ -44,7 +44,7 @@ class FavoritoControllerTest {
         favorito.setFechaAgregado(LocalDateTime.now());
         favorito.setUsuarioId(1);
 
-        when(favoritoService.guardar(any(Favorito.class))).thenReturn(favorito);
+        when(favoritoService.guardarFavorito(any(Favorito.class))).thenReturn(favorito);
 
         String body = """
         {
@@ -87,7 +87,7 @@ class FavoritoControllerTest {
     @Test
     @DisplayName("Debe eliminar favorito")
     void eliminarFavorito() throws Exception {
-        doNothing().when(favoritoService).eliminar(1 , 1);
+        doNothing().when(favoritoService).eliminarFavorito(1, 1);
 
         mockMvc.perform(delete("/favoritos/1"))
                 .andExpect(status().isOk());

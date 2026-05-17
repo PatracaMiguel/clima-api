@@ -43,7 +43,7 @@ public class WeatherService {
         WeatherResponseDTO response = restTemplate.getForObject(url, WeatherResponseDTO.class);
 
         if (response != null && response.getMain() != null) {
-            historialService.guardar(ciudad, response.getMain().getTemp() , usuarioId);
+            historialService.guardarHistorial(ciudad, response.getMain().getTemp(), usuarioId);
         }
         return response;
     }

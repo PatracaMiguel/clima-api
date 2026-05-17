@@ -13,7 +13,7 @@ public class HistorialService {
     @Autowired
     private HistorialRepository historialRepository;
 
-    public void guardar(String ciudad, Double temperatura , Integer usuarioId) {
+    public void guardarHistorial(String ciudad, Double temperatura , Integer usuarioId) {
         Historial historial = new Historial();
         historial.setCiudad(ciudad);
         historial.setTemperatura(temperatura);

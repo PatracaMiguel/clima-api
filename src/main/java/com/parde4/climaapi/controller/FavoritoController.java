@@ -37,7 +37,7 @@ public class FavoritoController {
         favorito.setPais(dto.getPais());
         favorito.setUsuarioId(usuarioId);
 
-        return mapToDTO(favoritoService.guardar(favorito));
+        return mapToDTO(favoritoService.guardarFavorito(favorito));
     }
 
     @GetMapping
@@ -64,7 +64,7 @@ public class FavoritoController {
             throw new RuntimeException("Debe iniciar sesión antes de eliminar favoritos");
         }
 
-        favoritoService.eliminar(id, usuarioId);
+        favoritoService.eliminarFavorito(id, usuarioId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("mensaje", "Favorito eliminado correctamente");

@@ -14,7 +14,7 @@ public class FavoritoService {
     @Autowired
     private FavoritoRepository favoritoRepository;
 
-    public Favorito guardar(Favorito favorito){
+    public Favorito guardarFavorito(Favorito favorito){
         favorito.setFechaAgregado(LocalDateTime.now());
         
         return favoritoRepository.save(favorito);
@@ -24,7 +24,7 @@ public class FavoritoService {
         return favoritoRepository.findByUsuarioId(usuarioId);
     }
 
-    public void eliminar(Integer id , Integer usuarioId){
+    public void eliminarFavorito(Integer id, Integer usuarioId){
         favoritoRepository.deleteById(id);
     }
 }
