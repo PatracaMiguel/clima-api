@@ -9,14 +9,16 @@ import lombok.Data;
 public class UsuarioRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 45, message = "El nombre no puede exceder 45 caracteres")
     private String nombre;
 
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "El correo no es válido")
-    @Size(min = 5 , max = 45 , message = "El correo debe tener entre 5 y 45 caracteres")
+    @Size(min = 6, message = "El correo debe tener entre 6 y 45 caracteres")
+    @Size(max = 45, message = "El correo no puede exceder 45 caracteres")
     private String correo;
 
     @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6 , max = 60 , message = "La contraseña debe tener entre 6 y 60 caracteres")
+    @Size(min = 6, max = 60, message = "La contraseña debe tener entre 6 y 60 caracteres")
     private String contrasena;
 }

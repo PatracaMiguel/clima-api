@@ -30,19 +30,32 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> manejarValidaciones(MethodArgumentNotValidException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        Map<String, String> errores = new HashMap<>();
+    Map<String, Object> response = new HashMap<>();
+    Map<String, String> errores = new HashMap<>();
+    Map<String, Integer> prioridades = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errores.put(error.getField(), error.getDefaultMessage());
-        });
+    ex.getBindingResult().getFieldErrors().forEach(error -> {
+        String campo = error.getField();
+        String codigo = error.getCode();
 
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", 400);
-        response.put("error", "Error de validación");
-        response.put("mensajes", errores);
+        int prioridad = switch (codigo) {
+            case "NotBlank" -> 3;
+            case "Size" -> 2;
+            default -> 1;
+        };
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        if (!prioridades.containsKey(campo) || prioridad > prioridades.get(campo)) {
+            prioridades.put(campo, prioridad);
+            errores.put(campo, error.getDefaultMessage());
+        }
+    });
+
+    response.put("timestamp", LocalDateTime.now());
+    response.put("status", 400);
+    response.put("error", "Error de validación");
+    response.put("mensajes", errores);
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(HttpClientErrorException.NotFound.class)
