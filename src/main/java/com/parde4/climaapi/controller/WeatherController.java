@@ -20,25 +20,35 @@ public class WeatherController {
     private WeatherService weatherService;
 
     @GetMapping("/{ciudad}")
-    public WeatherResponseDTO obtenerClima(@PathVariable String ciudad, HttpSession session) {
+    public WeatherResponseDTO obtenerClima(@PathVariable String ciudad, HttpSession session) throws Exception {
 
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
             throw new RuntimeException("Debe iniciar sesión antes de consultar el clima");
         }
+
+        validarCiudad(ciudad);
 
         return weatherService.obtenerClimaPorCiudad(ciudad, usuarioId);
     }
 
     @GetMapping("/{ciudad}/pronostico")
-    public PronosticoResponseDTO obtenerPronostico(@PathVariable String ciudad , HttpSession session) {
+    public PronosticoResponseDTO obtenerPronostico(@PathVariable String ciudad , HttpSession session) throws Exception {
 
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
             throw new RuntimeException("Debe iniciar sesión antes de consultar el clima");
         }
+        validarCiudad(ciudad);
+
         return weatherService.obtenerPronosticoPorCiudad(ciudad);
+    }
+
+    private void validarCiudad(String ciudad) throws Exception {
+        if (ciudad == null || ciudad.trim().isEmpty()) {
+            throw new Exception("Ciudad vacia");
+        }
     }
 }

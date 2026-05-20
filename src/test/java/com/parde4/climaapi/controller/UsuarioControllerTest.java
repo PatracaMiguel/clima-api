@@ -3,7 +3,6 @@ package com.parde4.climaapi.controller;
 import com.parde4.climaapi.exception.GlobalExceptionHandler;
 import com.parde4.climaapi.model.Usuario;
 import com.parde4.climaapi.service.UsuarioService;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -57,7 +56,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-01 - Debe registrar usuario con datos válidos")
     void usr01CrearUsuarioConDatosValidosDebeRegistrarCorrectamente() throws Exception {
         Usuario usuario = crearUsuario(1, "Miguel", "miguel@gmail.com", "123456");
 
@@ -74,7 +72,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-02 - Debe retornar error cuando el correo está duplicado")
     void usr02CrearUsuarioConCorreoDuplicadoDebeRetornarErrorDeNegocio() throws Exception {
         when(usuarioService.crearUsuario(any(Usuario.class)))
                 .thenThrow(new RuntimeException("El correo ya está registrado"));
@@ -89,7 +86,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-03 - Debe retornar error de validación cuando el nombre está vacío")
     void usr03CrearUsuarioConNombreVacioDebeRetornarErrorDeValidacion() throws Exception {
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +99,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-04 - Debe retornar error de validación cuando el correo está vacío")
     void usr04CrearUsuarioConCorreoVacioDebeRetornarErrorDeValidacion() throws Exception {
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,7 +111,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-05 - Debe retornar error de validación cuando la contraseña está vacía")
     void usr05CrearUsuarioConContrasenaVaciaDebeRetornarErrorDeValidacion() throws Exception {
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +123,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-06 - Debe obtener usuario por id existente")
     void usr06ObtenerUsuarioConIdExistenteDebeRetornarDatosDelUsuario() throws Exception {
         Usuario usuario = crearUsuario(1, "Miguel", "miguel@gmail.com", "123456");
 
@@ -143,7 +136,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-07 - Debe retornar usuario no encontrado cuando el id no existe")
     void usr07ObtenerUsuarioConIdInexistenteDebeRetornarUsuarioNoEncontrado() throws Exception {
         when(usuarioService.obtenerUsuario(99))
                 .thenThrow(new RuntimeException("Usuario no encontrado"));
@@ -156,7 +148,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-08 - Debe actualizar usuario con datos válidos")
     void usr08ActualizarUsuarioConDatosValidosDebeActualizarCorrectamente() throws Exception {
         Usuario usuario = crearUsuario(1, "Miguel Actualizado", "nuevo@gmail.com", "123456");
 
@@ -173,7 +164,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-09 - Debe eliminar usuario con id existente")
     void usr09EliminarUsuarioConIdExistenteDebeEliminarCorrectamente() throws Exception {
         mockMvc.perform(delete("/usuarios/1"))
                 .andExpect(status().isOk())
@@ -181,7 +171,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-10 - Debe retornar usuario no encontrado al eliminar id inexistente")
     void usr10EliminarUsuarioConIdInexistenteDebeRetornarUsuarioNoEncontrado() throws Exception {
         org.mockito.Mockito.doThrow(new RuntimeException("Usuario no encontrado"))
                 .when(usuarioService).eliminarUsuario(99);
@@ -194,7 +183,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-11 - Debe validar que el nombre no exceda 45 caracteres")
     void usr11CrearUsuarioConNombreDe46CaracteresDebeRetornarErrorDeValidacion() throws Exception {
         String nombre = "A".repeat(46);
 
@@ -210,7 +198,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-12 - Debe permitir nombre de 45 caracteres")
     void usr12CrearUsuarioConNombreDe45CaracteresDebeRegistrarCorrectamente() throws Exception {
         String nombre = "A".repeat(45);
         Usuario usuario = crearUsuario(1, nombre, "miguel@gmail.com", "123456");
@@ -226,7 +213,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-13 - Debe permitir contraseña de 60 caracteres")
     void usr13CrearUsuarioConContrasenaDe60CaracteresDebeRegistrarCorrectamente() throws Exception {
         String contrasena = "A".repeat(60);
         Usuario usuario = crearUsuario(1, "Miguel", "miguel@gmail.com", contrasena);
@@ -241,7 +227,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-14 - Debe validar contraseña de 61 caracteres")
     void usr14CrearUsuarioConContrasenaDe61CaracteresDebeRetornarErrorDeValidacion() throws Exception {
         String contrasena = "A".repeat(61);
 
@@ -257,7 +242,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-15 - Debe permitir contraseña de 6 caracteres")
     void usr15CrearUsuarioConContrasenaDe6CaracteresDebeRegistrarCorrectamente() throws Exception {
         String contrasena = "123456";
         Usuario usuario = crearUsuario(1, "Miguel", "miguel@gmail.com", contrasena);
@@ -272,7 +256,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-16 - Debe validar contraseña de 5 caracteres")
     void usr16CrearUsuarioConContrasenaDe5CaracteresDebeRetornarErrorDeValidacion() throws Exception {
         String contrasena = "12345";
 
@@ -288,7 +271,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-17 - Debe retornar error al actualizar con correo duplicado")
     void usr17ActualizarUsuarioConCorreoDuplicadoDebeRetornarErrorDeNegocio() throws Exception {
         when(usuarioService.actualizarUsuario(eq(1), any(Usuario.class)))
                 .thenThrow(new RuntimeException("El correo ya está registrado"));
@@ -303,7 +285,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-18 - Debe permitir correo de 45 caracteres")
     void usr18CrearUsuarioConCorreoDe45CaracteresDebeRegistrarCorrectamente() throws Exception {
         String correo = "a".repeat(35) + "@gmail.com";
         Usuario usuario = crearUsuario(1, "Miguel", correo, "123456");
@@ -319,7 +300,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-19 - Debe validar correo de 46 caracteres")
     void usr19CrearUsuarioConCorreoDe46CaracteresDebeRetornarErrorDeValidacion() throws Exception {
         String correo = "a".repeat(36) + "@gmail.com";
 
@@ -335,7 +315,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-20 - Debe permitir correo de 6 caracteres")
     void usr20CrearUsuarioConCorreoDe6CaracteresDebeRegistrarCorrectamente() throws Exception {
         String correo = "a@b.co";
         Usuario usuario = crearUsuario(1, "Miguel", correo, "123456");
@@ -351,7 +330,6 @@ class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("USR-21 - Debe validar correo de 5 caracteres")
     void usr21CrearUsuarioConCorreoDe5CaracteresDebeRetornarErrorDeValidacion() throws Exception {
         String correo = "a@b.c";
 

@@ -21,4 +21,5 @@ public class UsuarioUpdateDTO {
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, max = 60, message = "La contraseña debe tener entre 6 y 60 caracteres")
     private String contrasena;
+    
 }

@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
         error.put("status", 404);
         error.put("error", "Ciudad no encontrada");
         error.put("mensaje",
-                "No se encontró información climática para la ciudad ingresada , cheque bien el nombre e intente nuevamente.");
+                "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
