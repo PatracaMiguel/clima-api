@@ -25,7 +25,7 @@ public class WeatherController {
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
-            throw new RuntimeException("Debe iniciar sesión antes de consultar el clima");
+            throw new RuntimeException("Debe iniciar sesion antes de consultar el clima");
         }
 
         validarCiudad(ciudad);
@@ -39,7 +39,7 @@ public class WeatherController {
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
-            throw new RuntimeException("Debe iniciar sesión antes de consultar el clima");
+            throw new RuntimeException("Debe iniciar sesion antes de consultar el clima");
         }
         validarCiudad(ciudad);
 

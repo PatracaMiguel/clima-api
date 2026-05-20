@@ -29,7 +29,7 @@ public class FavoritoController {
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
-            throw new RuntimeException("Debe iniciar sesión antes de guardar favoritos");
+            throw new RuntimeException("Debe iniciar sesion antes de guardar favoritos");
         }
 
         Favorito favorito = new Favorito();
@@ -46,7 +46,7 @@ public class FavoritoController {
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
-            throw new RuntimeException("Debe iniciar sesión antes de ver favoritos");
+            throw new RuntimeException("Debe iniciar sesion antes de ver favoritos");
         }
 
         return favoritoService.listarPorUsuario(usuarioId)
@@ -61,7 +61,7 @@ public class FavoritoController {
         Integer usuarioId = (Integer) session.getAttribute("usuarioId");
 
         if (usuarioId == null) {
-            throw new RuntimeException("Debe iniciar sesión antes de eliminar favoritos");
+            throw new RuntimeException("Debe iniciar sesion antes de eliminar favoritos");
         }
 
         favoritoService.eliminarFavorito(id, usuarioId);

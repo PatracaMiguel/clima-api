@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
         error.put("status", 401);
         error.put("error", "Error de autenticación");
         error.put("mensaje",
-                "La API Key de OpenWeatherMap es inválida o no está configurada correctamente.");
+                "La API Key de OpenWeatherMap es invalida o no está configurada correctamente.");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
@@ -97,7 +97,7 @@ public class GlobalExceptionHandler {
         error.put("status", 500);
         error.put("error", "Error interno del servidor");
         error.put("mensaje",
-                "Ocurrió un problema en el sistema , intentelo más tarde.");
+                "Ocurrio un problema en el sistema , intentelo mas tarde.");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }

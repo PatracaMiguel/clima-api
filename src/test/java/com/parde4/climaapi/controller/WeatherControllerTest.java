@@ -31,11 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class WeatherControllerTest {
 
     private static final int USUARIO_ID = 1;
-    private static final String MENSAJE_SESION_REQUERIDA = "Debe iniciar sesi\u00f3n antes de consultar el clima";
+    private static final String MENSAJE_SESION_REQUERIDA = "Debe iniciar sesion antes de consultar el clima";
     private static final String MENSAJE_CIUDAD_NO_ENCONTRADA =
-            "No se encontr\u00f3 informaci\u00f3n clim\u00e1tica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
+            "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
     private static final String MENSAJE_ERROR_SISTEMA =
-            "Ocurri\u00f3 un problema en el sistema , intentelo m\u00e1s tarde.";
+            "Ocurrio un problema en el sistema , intentelo mas tarde.";
 
     @Autowired
     private MockMvc mockMvc;

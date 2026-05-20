@@ -34,10 +34,10 @@ class FavoritoControllerTest {
 
     private static final int USUARIO_ID = 1;
     private static final String MENSAJE_FAVORITO_GUARDADO = "Favorito guardado correctamente";
-    private static final String MENSAJE_GUARDAR_REQUIERE_SESION = "Debe iniciar sesi\u00f3n antes de guardar favoritos";
-    private static final String MENSAJE_VER_REQUIERE_SESION = "Debe iniciar sesi\u00f3n antes de ver favoritos";
+    private static final String MENSAJE_GUARDAR_REQUIERE_SESION = "Debe iniciar sesion antes de guardar favoritos";
+    private static final String MENSAJE_VER_REQUIERE_SESION = "Debe iniciar sesion antes de ver favoritos";
     private static final String MENSAJE_CIUDAD_NO_ENCONTRADA =
-            "No se encontr\u00f3 informaci\u00f3n clim\u00e1tica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
+            "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
 
     @Autowired
     private MockMvc mockMvc;
