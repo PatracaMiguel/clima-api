@@ -30,4 +30,7 @@ public class Usuario {
 
     @Column(name = "fecha_creado")
     private LocalDateTime fechaCreado;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

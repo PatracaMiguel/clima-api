@@ -5,6 +5,8 @@ import com.parde4.climaapi.dto.LoginResponse;
 import com.parde4.climaapi.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,8 +20,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpSession session) {
         LoginResponse response = authService.login(request);
+    
+        session.setAttribute("usuarioId", response.getIdUsuario());
+
         return ResponseEntity.ok(response);
     }
+
 }

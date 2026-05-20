@@ -11,5 +11,6 @@ public class FavoritoResponseDTO {
     private String pais;
     private LocalDateTime fechaAgregado;
     private Integer usuarioId;
+    private String mensaje;
 
 }

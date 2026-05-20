@@ -27,4 +27,10 @@ public class Historial {
 
     @Column(name = "fecha_consulta")
     private LocalDateTime fechaConsulta;
+
+    @Column(name = "usuario_idusuario")
+    private Integer usuarioId;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }
