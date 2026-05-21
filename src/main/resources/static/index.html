@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="brand-panel">
+            <div>
+                <p class="eyebrow">Clima API</p>
+                <h1>Consulta el clima desde tu cuenta</h1>
+                <p class="intro">Inicia sesion o crea una cuenta para guardar favoritos, revisar historial y ver recomendaciones.</p>
+            </div>
+        </section>
+
+        <section class="auth-panel" aria-live="polite">
+            <form id="login-form" class="auth-form">
+                <h2>Iniciar sesion</h2>
+                <p class="form-copy">Usa tu correo y contrasena registrados.</p>
+
+                <label for="login-correo">Correo</label>
+                <input id="login-correo" name="correo" type="email" autocomplete="email" required>
+
+                <label for="login-contrasena">Contrasena</label>
+                <input id="login-contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+
+                <p id="login-message" class="message"></p>
+
+                <button type="submit">Iniciar sesion</button>
+                <button class="link-button" type="button" data-show="register-form">Crear cuenta</button>
+            </form>
+
+            <form id="register-form" class="auth-form hidden">
+                <h2>Crear cuenta</h2>
+                <p class="form-copy">Registra tus datos para empezar a usar la aplicacion.</p>
+
+                <label for="register-nombre">Nombre</label>
+                <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
+
+                <label for="register-correo">Correo</label>
+                <input id="register-correo" name="correo" type="email" autocomplete="email" maxlength="45" required>
+
+                <label for="register-contrasena">Contrasena</label>
+                <input id="register-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+
+                <label for="register-confirmar">Confirmar contrasena</label>
+                <input id="register-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+
+                <p id="register-message" class="message"></p>
+
+                <button type="submit">Crear cuenta</button>
+                <button class="link-button" type="button" data-show="login-form">Volver al login</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="/scripts/app.js"></script>
+</body>
+</html>
