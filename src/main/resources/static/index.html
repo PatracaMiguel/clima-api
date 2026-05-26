@@ -7,19 +7,16 @@
     <link rel="stylesheet" href="/styles/app.css">
 </head>
 <body>
-    <main class="auth-page">
-        <section class="brand-panel">
-            <div>
-                <p class="eyebrow">Clima API</p>
-                <h1>Consulta el clima desde tu cuenta</h1>
-                <p class="intro">Inicia sesion o crea una cuenta para guardar favoritos, revisar historial y ver recomendaciones.</p>
-            </div>
+    <main id="auth-page" class="auth-page">
+        <section class="auth-brand">
+            <p class="eyebrow">Clima API</p>
+            <h1>Consulta el clima y recibe recomendaciones para salir preparado</h1>
         </section>
 
         <section class="auth-panel" aria-live="polite">
             <form id="login-form" class="auth-form">
                 <h2>Iniciar sesion</h2>
-                <p class="form-copy">Usa tu correo y contrasena registrados.</p>
+                <p class="form-copy">Entra con tu cuenta para consultar el clima.</p>
 
                 <label for="login-correo">Correo</label>
                 <input id="login-correo" name="correo" type="email" autocomplete="email" required>
@@ -35,7 +32,7 @@
 
             <form id="register-form" class="auth-form hidden">
                 <h2>Crear cuenta</h2>
-                <p class="form-copy">Registra tus datos para empezar a usar la aplicacion.</p>
+                <p class="form-copy">Registra tus datos para usar la aplicacion.</p>
 
                 <label for="register-nombre">Nombre</label>
                 <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
@@ -54,6 +51,66 @@
                 <button type="submit">Crear cuenta</button>
                 <button class="link-button" type="button" data-show="login-form">Volver al login</button>
             </form>
+        </section>
+    </main>
+
+    <main id="dashboard" class="dashboard hidden">
+        <section id="search-view" class="search-view" aria-live="polite">
+            <button id="logout-button" class="logout-button" type="button">Cerrar sesion</button>
+            <h1>Clima API</h1>
+
+            <form id="weather-form" class="search-form">
+                <label for="city-input">Buscar ciudad</label>
+                <div class="search-row">
+                    <input id="city-input" name="ciudad" type="search" placeholder="Ej. Ciudad de Mexico" required>
+                    <button type="submit">Buscar</button>
+                </div>
+            </form>
+
+            <nav class="category-bar" aria-label="Categorias">
+                <button class="category-button" type="button">Historial</button>
+                <button class="category-button" type="button">Favoritos</button>
+                <button id="user-button" class="category-button" type="button" onclick="location.href='/perfil.html'">Usuario</button>
+            </nav>
+
+            <p id="dashboard-message" class="message dashboard-message"></p>
+        </section>
+
+        <section id="result-view" class="result-view hidden" aria-live="polite">
+            <button id="back-button" class="back-button" type="button">Volver al buscador</button>
+
+            <article class="result-panel">
+                <p class="panel-label">Consulta</p>
+                <h2 id="current-city">Busca una ciudad</h2>
+                <div class="temperature-row">
+                    <strong id="current-temp">--</strong>
+                    <span id="current-description">Sin datos cargados.</span>
+                </div>
+                <dl class="metrics">
+                    <div>
+                        <dt>Sensacion</dt>
+                        <dd id="feels-like">--</dd>
+                    </div>
+                    <div>
+                        <dt>Estado</dt>
+                        <dd id="weather-main">--</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="result-panel">
+                <p class="panel-label">Pronostico</p>
+                <h2>Proximas horas</h2>
+                <div id="forecast-list" class="forecast-list empty-state">Busca una ciudad para ver el pronostico.</div>
+            </article>
+
+            <article class="result-panel recommendation-panel">
+                <p class="panel-label">Recomendaciones</p>
+                <h2>Que usar hoy</h2>
+                <p id="clothing-recommendation">Consulta una ciudad para recibir una recomendacion de ropa.</p>
+                <p id="accessory-recommendation" class="muted"></p>
+                <p id="weather-advice" class="advice"></p>
+            </article>
         </section>
     </main>
 

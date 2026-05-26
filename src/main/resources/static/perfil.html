@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tu perfil - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css">
+    <style>
+        /* Layout overrides for perfil page */
+        body { background: #edf4f2; margin: 0; min-height: 100vh; font-family: inherit; color: inherit; }
+        .topbar {
+            background: #0284C7;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            box-shadow: 0 2px 6px rgba(23,49,61,0.12);
+        }
+        .brand {
+            color: #0284C7;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+        .topbar .logout-button {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.16);
+            color: #ffffff;
+            min-width: 140px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 16px;
+            min-height: calc(100vh - 64px);
+        }
+        .card {
+            width: 100%;
+            max-width: 720px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 18px 50px rgba(23, 49, 61, 0.12);
+            text-align: center;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #0284C7;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 0 auto 14px;
+        }
+        .display-name {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            color: #17313d;
+        }
+        .display-email {
+            margin: 6px 0 18px;
+            color: #60717a;
+            font-size: 14px;
+        }
+        .separator {
+            height: 1px;
+            background: #e6efee;
+            margin: 18px 0;
+        }
+        .profile-form {
+            margin-top: 8px;
+            text-align: left;
+            display: grid;
+            gap: 10px;
+        }
+        .profile-form label { font-size: 13px; color: #4b6166; }
+        .profile-form input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #d7e6e4;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        /* green button matching visual style, full width like inputs */
+        .btn-guardar {
+            background: #0284C7; /* same green used in brand */
+            color: #ffffff;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 6px 18px rgba(23,49,61,0.08);
+        }
+        .btn-guardar:disabled { opacity: 0.6; cursor: default; }
+
+        .message { margin-top: 6px; min-height: 20px; }
+        @media (max-width: 520px) {
+            .avatar { width: 96px; height: 96px; font-size: 40px; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar" role="banner">
+        <div class="brand">Clima API</div>
+        <div>
+            <button id="logout-button" class="logout-button" type="button">Volver a buscador</button>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <section class="card" aria-live="polite">
+            <div id="avatar-initial" class="avatar">?</div>
+            <h2 id="display-name" class="display-name">Tu nombre</h2>
+            <div id="display-email" class="display-email">tu@correo.com</div>
+
+            <div class="separator" aria-hidden="true"></div>
+
+            <form id="profile-form" class="profile-form" novalidate>
+                <div>
+                    <label for="profile-nombre">Nombre</label>
+                    <input id="profile-nombre" name="nombre" type="text" maxlength="45" required>
+                </div>
+
+                <div>
+                    <label for="profile-correo">Correo</label>
+                    <input id="profile-correo" name="correo" type="email" maxlength="45">
+                </div>
+
+                <div>
+                    <label for="profile-contrasena">Contraseña</label>
+                    <input id="profile-contrasena" name="contrasena" type="password" minlength="6" maxlength="60" autocomplete="new-password">
+                </div>
+
+                <p id="profile-message" class="message"></p>
+
+                <div>
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        function readJson(response) {
+            return response.text().then((text) => {
+                if (!text) return {};
+                try { return JSON.parse(text); } catch (e) { return { mensaje: text }; }
+            });
+        }
+
+        function errorMessage(body) {
+            if (!body) return "Ocurrio un error.";
+            if (body.mensaje) return body.mensaje;
+            if (body.mensajes) return Object.values(body.mensajes).join(" ");
+            return "Ocurrio un error.";
+        }
+
+        function setMessage(el, text, type) {
+            el.textContent = text;
+            el.classList.remove("success", "error");
+            if (type) el.classList.add(type);
+        }
+
+        async function requestJson(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    method: options.method || "GET",
+                    headers: options.body ? { "Content-Type": "application/json" } : {},
+                    credentials: "same-origin",
+                    body: options.body ? JSON.stringify(options.body) : undefined
+                });
+
+                const data = await readJson(response);
+
+                if (!response.ok) {
+                    if (String(data.mensaje || "").toLowerCase().includes("iniciar sesion")) {
+                        sessionStorage.removeItem("usuario");
+                        window.location.href = "/index.html";
+                        return { ok: false, data, message: errorMessage(data) };
+                    }
+                    return { ok: false, data, message: errorMessage(data) };
+                }
+
+                return { ok: true, data, message: "" };
+            } catch (e) {
+                return { ok: false, data: {}, message: "No se pudo conectar con la API." };
+            }
+        }
+
+        function getSessionUserId() {
+            try {
+                const raw = sessionStorage.getItem("usuario");
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                return parsed?.idUsuario ?? null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function getSessionUsuario() {
+            try {
+                const raw = sessionStorage.getItem("usuario");
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        const form = document.querySelector("#profile-form");
+        const msg = document.querySelector("#profile-message");
+        const nombreIn = document.querySelector("#profile-nombre");
+        const correoIn = document.querySelector("#profile-correo");
+        const passIn = document.querySelector("#profile-contrasena");
+        const logoutBtn = document.querySelector("#logout-button");
+
+        const avatarEl = document.querySelector("#avatar-initial");
+        const nameTitleEl = document.querySelector("#display-name");
+        const emailSubEl = document.querySelector("#display-email");
+
+        const userId = getSessionUserId();
+        if (!userId) {
+            window.location.href = "/index.html";
+            return;
+        }
+
+        let originalUser = {};
+
+        logoutBtn.addEventListener("click", async function () {
+            logoutBtn.disabled = true;
+            try {
+                await fetch("/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+            } catch (e) {
+            } finally {
+                sessionStorage.clear();
+                window.location.href = "/index.html";
+            }
+        });
+
+        function setDisplayInfo(nombre, correo) {
+            const initial = (nombre && String(nombre).trim()) ? String(nombre).trim().charAt(0).toUpperCase() : "?";
+            avatarEl.textContent = initial;
+            nameTitleEl.textContent = nombre || "Tu nombre";
+            emailSubEl.textContent = correo || "tu@correo.com";
+        }
+
+        (async function load() {
+            setMessage(msg, "Cargando datos...", "");
+            const res = await requestJson(`/usuarios/${encodeURIComponent(userId)}`);
+            if (!res.ok) {
+                setMessage(msg, res.message || "No se pudieron cargar los datos.", "error");
+                return;
+            }
+            const user = res.data || {};
+            originalUser = Object.assign({}, user);
+            nombreIn.value = user.nombre ?? "";
+            correoIn.value = user.correo ?? "";
+            setDisplayInfo(user.nombre ?? "", user.correo ?? "");
+            setMessage(msg, "", "");
+        })();
+
+        form.addEventListener("submit", async function (ev) {
+            ev.preventDefault();
+            setMessage(msg, "", "");
+            const btn = form.querySelector("button[type='submit']");
+            btn.disabled = true;
+
+            const name = nombreIn.value.trim();
+            const email = correoIn.value.trim();
+            const pass = passIn.value;
+
+            const nameChanged = name !== (originalUser.nombre ?? "");
+            const emailChanged = email !== (originalUser.correo ?? "");
+            // consider password changed only if user typed something (non-empty)
+            const passChanged = pass != null && String(pass).trim().length > 0;
+            
+            // If password is provided -> treat as password change only (do not use it to authorize other changes)
+            if (passChanged && !nameChanged && !emailChanged) {
+                const body = { contrasena: pass };
+                const res = await requestJson(`/usuarios/${encodeURIComponent(userId)}`, {
+                    method: "PUT",
+                    body
+                });
+                btn.disabled = false;
+                if (!res.ok) {
+                    setMessage(msg, res.message || "No se pudo cambiar la contraseña.", "error");
+                    return;
+                }
+                setMessage(msg, "Cambio de contraseña exitoso.", "success");
+                passIn.value = "";
+                return;
+            }
+
+            // Build payload: only include fields that actually changed
+            let body = {};
+            if (nameChanged) body.nombre = name;
+            if (emailChanged) body.correo = email;
+            if (passChanged) body.contrasena = pass;
+
+            if (Object.keys(body).length === 0) {
+                setMessage(msg, "No hay cambios para guardar.", "error");
+                btn.disabled = false;
+                return;
+            }
+
+            const res = await requestJson(`/usuarios/${encodeURIComponent(userId)}`, {
+                method: "PUT",
+                body
+            });
+
+            btn.disabled = false;
+
+            if (!res.ok) {
+                setMessage(msg, res.message || "No se pudieron guardar los cambios.", "error");
+                return;
+            }
+
+            // Message depending on what changed
+            if (passChanged && !nameChanged && !emailChanged) {
+                setMessage(msg, "Cambio de contraseña exitoso.", "success");
+            } else if (passChanged) {
+                setMessage(msg, "Perfil y contraseña actualizados correctamente.", "success");
+            } else {
+                setMessage(msg, "Perfil actualizado correctamente.", "success");
+            }
+
+            if (nameChanged) originalUser.nombre = name;
+            if (emailChanged) originalUser.correo = email;
+            setDisplayInfo(originalUser.nombre ?? "", originalUser.correo ?? "");
+            passIn.value = "";
+        });
+    })();
+    </script>
+</body>
+</html>
