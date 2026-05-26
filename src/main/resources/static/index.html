@@ -8,49 +8,55 @@
 </head>
 <body>
     <main id="auth-page" class="auth-page">
-        <section class="auth-brand">
-            <p class="eyebrow">Clima API</p>
-            <h1>Consulta el clima y recibe recomendaciones para salir preparado</h1>
-        </section>
-
         <section class="auth-panel" aria-live="polite">
-            <form id="login-form" class="auth-form">
-                <h2>Iniciar sesion</h2>
-                <p class="form-copy">Entra con tu cuenta para consultar el clima.</p>
+            <div class="auth-shell">
+                <h1 class="auth-logo">Clima API</h1>
 
-                <label for="login-correo">Correo</label>
-                <input id="login-correo" name="correo" type="email" autocomplete="email" required>
+                <form id="login-form" class="auth-form">
+                    <h2>Iniciar sesion</h2>
 
-                <label for="login-contrasena">Contrasena</label>
-                <input id="login-contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+                    <label for="login-correo">Correo</label>
+                    <input id="login-correo" name="correo" type="email" autocomplete="email" required>
 
-                <p id="login-message" class="message"></p>
+                    <label for="login-contrasena">Contrasena</label>
+                    <div class="password-row">
+                        <input id="login-contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+                        <button class="password-toggle" type="button" data-toggle-password="login-contrasena">Mostrar</button>
+                    </div>
 
-                <button type="submit">Iniciar sesion</button>
-                <button class="link-button" type="button" data-show="register-form">Crear cuenta</button>
-            </form>
+                    <p id="login-message" class="message"></p>
 
-            <form id="register-form" class="auth-form hidden">
-                <h2>Crear cuenta</h2>
-                <p class="form-copy">Registra tus datos para usar la aplicacion.</p>
+                    <button type="submit">Iniciar sesion</button>
+                    <button class="link-button" type="button" data-show="register-form">Crear cuenta</button>
+                </form>
 
-                <label for="register-nombre">Nombre</label>
-                <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
+                <form id="register-form" class="auth-form hidden">
+                    <h2>Crear cuenta</h2>
 
-                <label for="register-correo">Correo</label>
-                <input id="register-correo" name="correo" type="email" autocomplete="email" maxlength="45" required>
+                    <label for="register-nombre">Nombre</label>
+                    <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
 
-                <label for="register-contrasena">Contrasena</label>
-                <input id="register-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                    <label for="register-correo">Correo</label>
+                    <input id="register-correo" name="correo" type="email" autocomplete="email" maxlength="45" required>
 
-                <label for="register-confirmar">Confirmar contrasena</label>
-                <input id="register-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                    <label for="register-contrasena">Contrasena</label>
+                    <div class="password-row">
+                        <input id="register-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                        <button class="password-toggle" type="button" data-toggle-password="register-contrasena">Mostrar</button>
+                    </div>
 
-                <p id="register-message" class="message"></p>
+                    <label for="register-confirmar">Confirmar contrasena</label>
+                    <div class="password-row">
+                        <input id="register-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                        <button class="password-toggle" type="button" data-toggle-password="register-confirmar">Mostrar</button>
+                    </div>
 
-                <button type="submit">Crear cuenta</button>
-                <button class="link-button" type="button" data-show="login-form">Volver al login</button>
-            </form>
+                    <p id="register-message" class="message"></p>
+
+                    <button type="submit">Crear cuenta</button>
+                    <button class="link-button" type="button" data-show="login-form">Volver al login</button>
+                </form>
+            </div>
         </section>
     </main>
 

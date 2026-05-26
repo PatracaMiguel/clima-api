@@ -13,6 +13,16 @@ document.querySelectorAll("[data-show]").forEach((button) => {
     });
 });
 
+document.querySelectorAll("[data-toggle-password]").forEach((button) => {
+    button.addEventListener("click", () => {
+        const input = document.querySelector(`#${button.dataset.togglePassword}`);
+        const isHidden = input.type === "password";
+
+        input.type = isHidden ? "text" : "password";
+        button.textContent = isHidden ? "Ocultar" : "Mostrar";
+    });
+});
+
 loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -42,7 +52,7 @@ registerForm.addEventListener("submit", async (event) => {
     const message = document.querySelector("#register-message");
 
     if (data.contrasena !== data.confirmar) {
-        setMessage(message, "Las contrasenas no coinciden.", "error");
+        setMessage(message, "Las contraseñas no coinciden.", "error");
         return;
     }
 
