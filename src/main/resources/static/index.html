@@ -68,7 +68,7 @@
             <form id="weather-form" class="search-form">
                 <label for="city-input">Buscar ciudad</label>
                 <div class="search-row">
-                    <input id="city-input" name="ciudad" type="search" placeholder="Ej. Ciudad de Mexico" required>
+                    <input id="city-input" name="ciudad" type="search" placeholder="Ej. Coatzacoalcos" autocomplete="off" required>
                     <button type="submit">Buscar</button>
                 </div>
             </form>
@@ -76,7 +76,7 @@
             <nav class="category-bar" aria-label="Categorias">
                 <button class="category-button" type="button">Historial</button>
                 <button class="category-button" type="button">Favoritos</button>
-                <button class="category-button" type="button">Usuario</button>
+                <button id="profile-button" class="category-button" type="button">Usuario</button>
             </nav>
 
             <p id="dashboard-message" class="message dashboard-message"></p>

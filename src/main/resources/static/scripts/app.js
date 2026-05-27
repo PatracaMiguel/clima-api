@@ -52,7 +52,7 @@ registerForm.addEventListener("submit", async (event) => {
     const message = document.querySelector("#register-message");
 
     if (data.contrasena !== data.confirmar) {
-        setMessage(message, "Las contraseñas no coinciden.", "error");
+        setMessage(message, "Las contrasenas no coinciden.", "error");
         return;
     }
 
@@ -103,6 +103,10 @@ document.querySelector("#logout-button").addEventListener("click", async () => {
 
 document.querySelector("#back-button").addEventListener("click", () => {
     showSearchView();
+});
+
+document.querySelector("#profile-button").addEventListener("click", () => {
+    window.location.href = "/perfil.html";
 });
 
 const storedUser = getStoredUser();
