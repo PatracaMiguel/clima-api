@@ -3,6 +3,7 @@ package com.parde4.climaapi.controller;
 import com.parde4.climaapi.dto.UsuarioRequestDTO;
 import com.parde4.climaapi.dto.UsuarioResponseDTO;
 import com.parde4.climaapi.dto.UsuarioUpdateDTO;
+import com.parde4.climaapi.dto.UsuarioPartialUpdateDTO;
 import com.parde4.climaapi.model.Usuario;
 import com.parde4.climaapi.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -56,6 +57,20 @@ public class UsuarioController {
         usuario.setContrasena(dto.getContrasena());
 
         Usuario actualizado = usuarioService.actualizarUsuario(id, usuario);
+
+        return mapToDTO(actualizado, "Usuario actualizado correctamente");
+    }
+
+    @PatchMapping("/{id}")
+    public UsuarioResponseDTO actualizarUsuarioParcial(
+            @PathVariable Integer id,
+            @RequestBody @Valid UsuarioPartialUpdateDTO dto) {
+
+        Usuario actualizado = usuarioService.actualizarUsuarioParcial(
+                id,
+                dto.getNombre(),
+                dto.getCorreo(),
+                dto.getContrasena());
 
         return mapToDTO(actualizado, "Usuario actualizado correctamente");
     }
