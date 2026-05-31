@@ -6,6 +6,7 @@ const weatherForm = document.querySelector("#weather-form");
 const dashboardMessage = document.querySelector("#dashboard-message");
 const searchView = document.querySelector("#search-view");
 const resultView = document.querySelector("#result-view");
+let currentFavorite = null;
 
 document.querySelectorAll("[data-show]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -109,16 +110,55 @@ document.querySelector("#profile-button").addEventListener("click", () => {
     window.location.href = "/perfil.html";
 });
 
+ensureFavoriteButton();
+
 const storedUser = getStoredUser();
 
 if (storedUser) {
     openDashboard();
+    loadPendingCity();
 }
 
 function openDashboard() {
     authPage.classList.add("hidden");
     dashboard.classList.remove("hidden");
     showSearchView();
+}
+
+function ensureFavoriteButton() {
+    const resultPanel = document.querySelector(".result-panel");
+    const metrics = document.querySelector(".metrics");
+    let favoriteButton = document.querySelector("#favorite-button");
+
+    if (!favoriteButton && resultPanel && metrics) {
+        const action = document.createElement("div");
+        action.id = "favorite-action";
+        action.className = "favorite-action";
+
+        favoriteButton = document.createElement("button");
+        favoriteButton.id = "favorite-button";
+        favoriteButton.className = "favorite-button";
+        favoriteButton.type = "button";
+        favoriteButton.textContent = "Guardar en favoritos";
+
+        action.appendChild(favoriteButton);
+        metrics.insertAdjacentElement("afterend", action);
+    }
+
+    favoriteButton?.addEventListener("click", async () => {
+        await saveCurrentFavorite();
+    });
+}
+
+async function loadPendingCity() {
+    const city = localStorage.getItem("climaCiudadPendiente");
+    if (!city) {
+        return;
+    }
+
+    localStorage.removeItem("climaCiudadPendiente");
+    weatherForm.elements.ciudad.value = city;
+    await loadCity(city);
 }
 
 function showForm(formId) {
@@ -154,12 +194,52 @@ async function loadCity(city) {
 function renderWeather(city, weather) {
     const main = weather.main || {};
     const firstWeather = Array.isArray(weather.weather) ? weather.weather[0] : {};
+    const country = weather.sys?.country || "Desconocido";
+    const resolvedCity = (weather.name || city || "").trim();
 
-    document.querySelector("#current-city").textContent = city;
+    currentFavorite = {
+        ciudad: resolvedCity,
+        pais: country
+    };
+
+    document.querySelector("#current-city").textContent = resolvedCity || city;
     document.querySelector("#current-temp").textContent = formatTemp(main.temp);
     document.querySelector("#feels-like").textContent = formatTemp(main.feels_like);
     document.querySelector("#weather-main").textContent = firstWeather.main || "--";
     document.querySelector("#current-description").textContent = firstWeather.description || "Sin descripcion";
+}
+
+async function saveCurrentFavorite() {
+    const favoriteButton = document.querySelector("#favorite-button");
+    const displayedCity = document.querySelector("#current-city").textContent.trim();
+    const searchedCity = weatherForm.elements.ciudad.value.trim();
+    const cityToSave = currentFavorite?.ciudad || displayedCity || searchedCity;
+
+    if (!cityToSave) {
+        setMessage(dashboardMessage, "Busca una ciudad antes de guardarla.", "error");
+        return;
+    }
+
+    currentFavorite = {
+        ciudad: cityToSave,
+        pais: currentFavorite?.pais || "Desconocido"
+    };
+
+    favoriteButton.disabled = true;
+
+    const response = await requestJson("/favoritos", {
+        method: "POST",
+        body: currentFavorite
+    });
+
+    favoriteButton.disabled = false;
+
+    if (!response.ok) {
+        setMessage(dashboardMessage, response.message || "No se pudo guardar el favorito.", "error");
+        return;
+    }
+
+    window.location.href = "/favoritos.html";
 }
 
 function renderRecommendation(recommendation) {
@@ -299,6 +379,7 @@ function clearDashboard() {
     document.querySelector("#weather-advice").textContent = "";
     document.querySelector("#forecast-list").className = "forecast-list empty-state";
     document.querySelector("#forecast-list").textContent = "Busca una ciudad para ver el pronostico.";
+    currentFavorite = null;
     showSearchView();
     clearMessages();
 }

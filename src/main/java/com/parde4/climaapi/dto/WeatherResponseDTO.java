@@ -6,8 +6,10 @@ import java.util.List;
 @Data
 public class WeatherResponseDTO {
     
+    private String name;
     private MainData main;
     private List<Weather> weather;
+    private Sys sys;
 
     @Data
     public static class MainData {
@@ -19,5 +21,10 @@ public class WeatherResponseDTO {
     public static class Weather {
         private String main;        
         private String description; 
+    }
+
+    @Data
+    public static class Sys {
+        private String country;
     }
 }

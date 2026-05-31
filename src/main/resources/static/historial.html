@@ -18,7 +18,7 @@
             color: #fff;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             padding: 12px 20px;
             box-shadow: 0 2px 6px rgba(23,49,61,0.12);
         }
@@ -30,6 +30,7 @@
             font-size: 18px;
         }
         .topbar .logout-button {
+            position: static;
             background: transparent;
             border: 1px solid rgba(255,255,255,0.16);
             color: #ffffff;
@@ -168,7 +169,6 @@
                     <p class="subcopy">Aqui puedes revisar las ultimas consultas de clima guardadas.</p>
                 </div>
                 <div class="header-actions">
-                    <button id="refresh-button" type="button">Actualizar</button>
                     <button id="clear-button" class="link-button danger-button" type="button">Limpiar historial</button>
                 </div>
             </div>
@@ -245,16 +245,11 @@
 
         const listEl = document.querySelector("#history-list");
         const messageEl = document.querySelector("#history-message");
-        const refreshButton = document.querySelector("#refresh-button");
         const clearButton = document.querySelector("#clear-button");
         const backButton = document.querySelector("#back-button");
 
         backButton.addEventListener("click", () => {
             window.location.href = "/index.html";
-        });
-
-        refreshButton.addEventListener("click", () => {
-            loadHistory();
         });
 
         clearButton.addEventListener("click", async () => {
