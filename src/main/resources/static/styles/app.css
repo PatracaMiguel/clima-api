@@ -377,6 +377,15 @@ input[type="password"]::-ms-clear {
     font-weight: 800;
 }
 
+.favorite-button {
+    display: block;
+    width: 100%;
+}
+
+.favorite-action {
+    margin-top: 18px;
+}
+
 .forecast-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(130px, 1fr));
@@ -430,16 +439,18 @@ input[type="password"]::-ms-clear {
     position: absolute;
     top: 24px;
     left: 24px;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    min-height: 44px;
+    padding: 8px 14px;
     border: 1px solid #9bd4ef;
-    border-radius: 50%;
+    border-radius: 6px;
     background: #ffffff;
     color: #0369a1;
-    font-size: 28px;
-    font-weight: 800;
+    font-size: 16px;
+    font-weight: 700;
     line-height: 1;
     text-decoration: none;
     box-shadow: 0 10px 24px rgba(39, 139, 190, 0.12);

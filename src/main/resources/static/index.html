@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clima API</title>
-    <link rel="stylesheet" href="/styles/app.css">
+    <link rel="stylesheet" href="/styles/app.css?v=4">
 </head>
 <body>
     <main id="auth-page" class="auth-page">
@@ -74,8 +74,8 @@
             </form>
 
             <nav class="category-bar" aria-label="Categorias">
-                <button class="category-button" type="button">Historial</button>
-                <button class="category-button" type="button">Favoritos</button>
+                <button class="category-button" type="button" onclick="location.href='/historial.html'">Historial</button>
+                <button class="category-button" type="button" onclick="location.href='/favoritos.html'">Favoritos</button>
                 <button id="profile-button" class="category-button" type="button">Usuario</button>
             </nav>
 
@@ -102,6 +102,9 @@
                         <dd id="weather-main">--</dd>
                     </div>
                 </dl>
+                <div id="favorite-action" class="favorite-action">
+                    <button id="favorite-button" class="favorite-button" type="button">Guardar en favoritos</button>
+                </div>
             </article>
 
             <article class="result-panel">
@@ -120,6 +123,6 @@
         </section>
     </main>
 
-    <script src="/scripts/app.js"></script>
+    <script src="/scripts/app.js?v=5"></script>
 </body>
 </html>

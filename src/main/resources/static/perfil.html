@@ -4,11 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - Clima API</title>
-    <link rel="stylesheet" href="/styles/app.css">
+    <link rel="stylesheet" href="/styles/app.css?v=5">
+    <style>
+        .profile-topbar {
+            background: #0284C7;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px 20px;
+            box-shadow: 0 2px 6px rgba(23,49,61,0.12);
+        }
+
+        .profile-topbar .profile-back-link {
+            position: static !important;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.16);
+            color: #ffffff;
+            min-width: 160px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            font-weight: 700;
+        }
+
+        .profile-page {
+            min-height: calc(100vh - 68px);
+        }
+    </style>
 </head>
 <body>
+    <header class="profile-topbar" role="banner">
+        <a class="profile-back-link" href="/index.html">Volver al buscador</a>
+    </header>
+
     <main class="profile-page">
-        <a class="profile-back-button" href="/index.html" aria-label="Volver al buscador">&larr;</a>
         <section class="profile-card" aria-live="polite">
             <h1 class="auth-logo">Clima API</h1>
             <div id="profile-avatar" class="profile-avatar">?</div>

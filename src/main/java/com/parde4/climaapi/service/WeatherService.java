@@ -41,7 +41,6 @@ public class WeatherService {
                 .toUriString();
 
         WeatherResponseDTO response = restTemplate.getForObject(url, WeatherResponseDTO.class);
-        historialService.guardarHistorial(ciudad, response.getMain().getTemp(), usuarioId);
 
         if (response != null && response.getMain() != null) {
             historialService.guardarHistorial(ciudad, response.getMain().getTemp(), usuarioId);
