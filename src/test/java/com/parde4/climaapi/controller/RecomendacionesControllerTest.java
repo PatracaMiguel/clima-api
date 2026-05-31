@@ -29,63 +29,57 @@ class RecomendacionesControllerTest {
 
     private static final int USUARIO_ID = 1;
     private static final String ROPA_CLEAR =
-            "Se recomienda usar ropa ligera, fresca y de colores claros como  playera de algodon, short o pantalon ligero.";
+            "Usa ropa fresca, ligera y de colores claros; una playera de algodon o lino y pantalon ligero funcionan bien.";
     private static final String ACCESORIOS_CLEAR =
-            "Lleve lentes de sol, gorra o sombrero, bloqueador solar y botella de agua.";
+            "Lleva lentes de sol, gorra o sombrero, protector solar y una botella de agua.";
     private static final String MENSAJE_CLEAR =
-            "El cielo esta despejado , aproveche el buen clima, pero protegase del sol.";
+            "El cielo esta despejado; aprovecha el dia, pero protege tu piel y mantente hidratado.";
     private static final String ROPA_RAIN =
-            "Se recomienda usar impermeable o chamarra resistente al agua, pantalon de secado rapido y zapatos con suela antideslizante";
+            "Usa impermeable o chamarra resistente al agua, pantalon que seque rapido y botas de lluvia o zapatos cerrados con suela antideslizante.";
     private static final String ACCESORIOS_RAIN =
-            "Lleve sombrilla, mochila impermeable, cubre zapatos y una bolsa plastica para proteger celular o documentos si lleva alguno";
+            "Lleva sombrilla, mochila impermeable, una bolsa para proteger celular o documentos y una muda ligera si vas a estar mucho tiempo fuera.";
     private static final String MENSAJE_RAIN =
-            "Esta lloviendo afuera , salga con tiempo y evita zonas encharcadas ";
+            "Hay lluvia; sal con tiempo, evita zonas encharcadas y cuida los cambios de temperatura.";
     private static final String ROPA_TORMENTA =
-            "Se recomienda usar impermeable, ropa comoda de secado rapido y calzado cerrado con buena suela.";
+            "Usa impermeable, ropa comoda de secado rapido y calzado cerrado con buena suela.";
     private static final String ACCESORIOS_TORMENTA =
-            "Lleve sombrilla resistente, mochila impermeable y linterna pequena si vas a estar fuera.";
+            "Lleva sombrilla resistente, mochila impermeable, linterna pequena y evita cargar objetos metalicos expuestos.";
     private static final String MENSAJE_TORMENTA =
-            "Hay tormenta ,  evite salir si no es necesario, no se resguardes bajo arboles y mantengase atento a los cambios del clima.";
+            "Hay tormenta; si puedes, espera a que baje la intensidad y evita resguardarte debajo de arboles.";
     private static final String ROPA_CLOUDS =
-            "Se recomienda usar ropa comoda y ligera puede usar una chamarra delgada por si baja la temperatura.";
+            "Usa ropa comoda en capas: playera ligera y una chamarra delgada por si baja la temperatura.";
     private static final String ACCESORIOS_CLOUDS =
-            "Lleve lentes de sol si hay calor intenso y somrbrilla pequena si hay nubes negras";
+            "Lleva lentes de sol si hay resolana y una sombrilla compacta si las nubes se ven densas.";
     private static final String MENSAJE_CLOUDS =
-            "El clima esta nublado pero es mejor salir preparado por si cambia durante el dia.";
+            "El clima esta nublado; conviene salir preparado por si cambia durante el dia.";
     private static final String ROPA_SNOW =
-            "Se recomienda usar sueter grueso, ropa termica, pantalon resistente al frio y botas.";
+            "Usa ropa termica, sueter grueso, chamarra abrigadora, pantalon resistente al frio y botas.";
     private static final String ACCESORIOS_SNOW =
-            "Lleve guantes, gorro, bufanda y calcetines termicos.";
+            "Lleva guantes, gorro, bufanda, calcetines termicos y protector labial.";
     private static final String MENSAJE_SNOW =
-            "Esta nevando abriguese bien y camine con precaucion por superficies resbalosas.";
+            "Hay nieve; abrigate bien y camina con cuidado en superficies resbalosas.";
     private static final String ROPA_BRUMA =
-            "Se recomienda usar ropa comoda y una chamarra ligera si hay humedad o baja visibilidad.";
+            "Usa ropa comoda y una chamarra ligera si hay humedad o baja visibilidad.";
     private static final String ACCESORIOS_BRUMA =
-            "Lleve cubrebocas si hay bruma, luces o reflejantes si caminas, y maneje con precaucion.";
+            "Lleva cubrebocas si hay bruma, luces o reflejantes si caminas, y maneja con precaucion.";
     private static final String MENSAJE_BRUMA =
-            "Hay niebla o bruma, si conduce reduja la velocidad, manten distancia y evite zonas con poca visibilidad.";
+            "Hay niebla o bruma; reduce la velocidad, manten distancia y evita zonas con poca visibilidad.";
     private static final String TEMP_CALUROSO =
-            "El clima esta caluroso usa ropa fresca, lentes de sol y toma agua durante el dia.";
+            "El dia esta caluroso: usa ropa ligera, colores claros, lentes de sol y toma agua durante el dia.";
     private static final String TEMP_FRESCO =
-            "El clima es fresco usa ropa comoda, una chamarra ligera puede ser util si estaras fuera por la tarde.";
+            "El clima esta fresco: usa ropa comoda y lleva una chamarra ligera si estaras fuera por la tarde o noche.";
     private static final String TEMP_BAJO_CERO =
-            "La temperatura es bajo cero Usa varias capas de ropa, abrigo grueso, guantes y gorro.";
+            "La temperatura esta bajo cero: usa varias capas de ropa, abrigo grueso, guantes, gorro y bufanda.";
     private static final String TEMP_FRIO =
-            "El clima es frio lleva sueter o chamarra gruesa para evitar cambios bruscos de temperatura.";
+            "Hace frio: lleva sueter o chamarra, pantalon largo y calzado cerrado para evitar cambios bruscos de temperatura.";
     private static final String TEMP_EXTREMA =
-            "Temperatura extremadamente alta evita exponerte al sol, toma agua constantemente y procura estar en sombra o lugares ventilados.";
+            "La temperatura es extremadamente alta: evita el sol directo, usa ropa muy ligera y transpirable, toma agua constantemente y busca sombra o lugares ventilados.";
     private static final String TEMP_MUCHO_CALOR =
-            "Hace mucho calor afuera usa bloqueador, hidratate y evita actividades pesadas al aire libre.";
+            "Hace mucho calor: usa ropa suelta y fresca, protector solar, lentes de sol, gorra y evita actividad pesada al aire libre.";
     private static final String TEMP_CALIDO =
-            "El clima es calido y agradable sal con ropa ligera, pero no olvides protegerte del sol.";
+            "La temperatura es calida y agradable: usa ropa ligera, pero no olvides protector solar si estaras al aire libre.";
     private static final String TEMP_FRIO_EXTREMO =
-            "El clima es fio extremo usa chamarra o sueter grueso, pantalon largo y calzado cerrado.";
-    private static final String ROPA_DEFAULT =
-            "Se recomienda usar ropa comoda adecuada para salir durante el dia.";
-    private static final String ACCESORIOS_DEFAULT =
-            "Lleva agua y revise el clima antes de salir.";
-    private static final String MENSAJE_DEFAULT =
-            "El clima puede variar,  sal preparado para cambios repentinos.";
+            "Hace frio intenso: usa chamarra gruesa, sueter, pantalon largo, calcetines abrigadores y calzado cerrado.";
     private static final String MENSAJE_CIUDAD_NO_ENCONTRADA =
             "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
     private static final String MENSAJE_SESION_REQUERIDA =
@@ -229,12 +223,12 @@ class RecomendacionesControllerTest {
 
     @Test
     @DisplayName("REC-14 - GET /recomendaciones/{ciudad} con 25C y Drizzle")
-    void recomendar_Drizzle25_RetornaRecomendacionDefault() throws Exception {
+    void recomendar_Drizzle25_RetornaRecomendacionLluvia() throws Exception {
         when(weatherService.obtenerClimaPorCiudad("Cordoba", null))
                 .thenReturn(crearClima(25.0, "Drizzle", "drizzle"));
 
         assertRecomendacion("Cordoba", 25.0, "Drizzle", "drizzle",
-                ROPA_DEFAULT, ACCESORIOS_DEFAULT, MENSAJE_DEFAULT + " " + TEMP_CALIDO);
+                ROPA_RAIN, ACCESORIOS_RAIN, MENSAJE_RAIN + " " + TEMP_CALIDO);
     }
 
     @Test
