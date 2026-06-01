@@ -5,7 +5,7 @@ services:
     restart: always
 
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-parde4}
       MYSQL_DATABASE: clima_db
 
     ports:
@@ -20,8 +20,7 @@ services:
       retries: 10
 
   app:
-    build: .
-    image: clima-api
+    image: patracamiguel/clima-api:latest
     container_name: clima_app
 
     depends_on:
@@ -34,8 +33,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/clima_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      WEATHER_API_KEY: ${WEATHER_API_KEY}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-parde4}
+      WEATHER_API_KEY: ${WEATHER_API_KEY:-aaa1b2d610dbc18cbacdf4c32273c324}
 
 volumes:
   mysql_data:

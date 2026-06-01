@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css?v=6">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-panel" aria-live="polite">
+            <div class="auth-shell">
+                <h1 class="auth-logo">Clima API</h1>
+
+                <form id="register-form" class="auth-form">
+                    <h2>Crear cuenta</h2>
+
+                    <label for="register-nombre">Nombre</label>
+                    <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
+
+                    <label for="register-correo">Correo</label>
+                    <input id="register-correo" name="correo" type="email" autocomplete="email" maxlength="45" required>
+
+                    <label for="register-contrasena">Contrasena</label>
+                    <div class="password-row">
+                        <input id="register-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                        <button class="password-toggle" type="button" data-toggle-password="register-contrasena">Mostrar</button>
+                    </div>
+
+                    <label for="register-confirmar">Confirmar contrasena</label>
+                    <div class="password-row">
+                        <input id="register-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
+                        <button class="password-toggle" type="button" data-toggle-password="register-confirmar">Mostrar</button>
+                    </div>
+
+                    <p id="register-message" class="message"></p>
+
+                    <button type="submit">Crear cuenta</button>
+                    <a class="link-button auth-link" href="/index.html">Volver al login</a>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="/scripts/registro.js?v=1"></script>
+</body>
+</html>

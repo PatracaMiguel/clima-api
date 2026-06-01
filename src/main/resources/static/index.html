@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clima API</title>
-    <link rel="stylesheet" href="/styles/app.css?v=4">
+    <title>Iniciar sesion - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css?v=6">
 </head>
 <body>
-    <main id="auth-page" class="auth-page">
+    <main class="auth-page">
         <section class="auth-panel" aria-live="polite">
             <div class="auth-shell">
                 <h1 class="auth-logo">Clima API</h1>
@@ -27,102 +27,12 @@
                     <p id="login-message" class="message"></p>
 
                     <button type="submit">Iniciar sesion</button>
-                    <button class="link-button" type="button" data-show="register-form">Crear cuenta</button>
-                </form>
-
-                <form id="register-form" class="auth-form hidden">
-                    <h2>Crear cuenta</h2>
-
-                    <label for="register-nombre">Nombre</label>
-                    <input id="register-nombre" name="nombre" type="text" autocomplete="name" maxlength="45" required>
-
-                    <label for="register-correo">Correo</label>
-                    <input id="register-correo" name="correo" type="email" autocomplete="email" maxlength="45" required>
-
-                    <label for="register-contrasena">Contrasena</label>
-                    <div class="password-row">
-                        <input id="register-contrasena" name="contrasena" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
-                        <button class="password-toggle" type="button" data-toggle-password="register-contrasena">Mostrar</button>
-                    </div>
-
-                    <label for="register-confirmar">Confirmar contrasena</label>
-                    <div class="password-row">
-                        <input id="register-confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="6" maxlength="60" required>
-                        <button class="password-toggle" type="button" data-toggle-password="register-confirmar">Mostrar</button>
-                    </div>
-
-                    <p id="register-message" class="message"></p>
-
-                    <button type="submit">Crear cuenta</button>
-                    <button class="link-button" type="button" data-show="login-form">Volver al login</button>
+                    <a class="link-button auth-link" href="/registro.html">Crear cuenta</a>
                 </form>
             </div>
         </section>
     </main>
 
-    <main id="dashboard" class="dashboard hidden">
-        <section id="search-view" class="search-view" aria-live="polite">
-            <button id="logout-button" class="logout-button" type="button">Cerrar sesion</button>
-            <h1>Clima API</h1>
-
-            <form id="weather-form" class="search-form">
-                <label for="city-input">Buscar ciudad</label>
-                <div class="search-row">
-                    <input id="city-input" name="ciudad" type="search" placeholder="Ej. Coatzacoalcos" autocomplete="off" required>
-                    <button type="submit">Buscar</button>
-                </div>
-            </form>
-
-            <nav class="category-bar" aria-label="Categorias">
-                <button class="category-button" type="button" onclick="location.href='/historial.html'">Historial</button>
-                <button class="category-button" type="button" onclick="location.href='/favoritos.html'">Favoritos</button>
-                <button id="profile-button" class="category-button" type="button">Usuario</button>
-            </nav>
-
-            <p id="dashboard-message" class="message dashboard-message"></p>
-        </section>
-
-        <section id="result-view" class="result-view hidden" aria-live="polite">
-            <button id="back-button" class="back-button" type="button">Volver al buscador</button>
-
-            <article class="result-panel">
-                <p class="panel-label">Consulta</p>
-                <h2 id="current-city">Busca una ciudad</h2>
-                <div class="temperature-row">
-                    <strong id="current-temp">--</strong>
-                    <span id="current-description">Sin datos cargados.</span>
-                </div>
-                <dl class="metrics">
-                    <div>
-                        <dt>Sensacion</dt>
-                        <dd id="feels-like">--</dd>
-                    </div>
-                    <div>
-                        <dt>Estado</dt>
-                        <dd id="weather-main">--</dd>
-                    </div>
-                </dl>
-                <div id="favorite-action" class="favorite-action">
-                    <button id="favorite-button" class="favorite-button" type="button">Guardar en favoritos</button>
-                </div>
-            </article>
-
-            <article class="result-panel">
-                <p class="panel-label">Pronostico</p>
-                <h2>Proximas horas</h2>
-                <div id="forecast-list" class="forecast-list empty-state">Busca una ciudad para ver el pronostico.</div>
-            </article>
-
-            <article class="result-panel recommendation-panel">
-                <p class="panel-label">Recomendaciones</p>
-                <h2>Que usar hoy</h2>
-                <p id="clothing-recommendation">Consulta una ciudad para recibir una recomendacion de ropa.</p>
-                <p id="accessory-recommendation" class="muted"></p>
-                <p id="weather-advice" class="advice"></p>
-            </article>
-        </section>
-    </main>
-
-    <script src="/scripts/app.js?v=5"></script>
+    <script src="/scripts/login.js?v=1"></script>
 </body>
 </html>
