@@ -215,18 +215,45 @@ Al igual que en `favorito`, la columna `usuario_idusuario` relaciona cada regist
 
 ---
 
-## 🐳 Ejecución con Docker
+## Ejecucion con Docker Compose
 
-### Levantar la base de datos con imagen personalizada
+El proyecto queda listo para levantarse con un solo comando. Docker Compose construye la imagen de la aplicacion, descarga la imagen de MySQL y expone el frontend en:
 
-Para ejecutar la base de datos se utilizó una imagen personalizada subida a Docker Hub.
-
-### Comandos
-
+```text
+http://localhost:8080
 ```
-docker pull elisasc/clima-db
-docker rm -f clima_db
-docker run -d -p 3307:3306 --name clima_db elisasc/clima-db
+
+### Levantar el sistema
+
+```bash
+docker compose up
+```
+
+Si quieres forzar la reconstruccion de la imagen despues de cambiar codigo, usa:
+
+```bash
+docker compose up --build
+```
+
+### Variables de entorno
+
+Docker Compose usa valores por defecto para desarrollo local. Si quieres usar tus propias credenciales, copia `.env.example` a `.env` y cambia los valores:
+
+```bash
+DB_PASSWORD=parde4
+WEATHER_API_KEY=tu_api_key_de_openweathermap
+```
+
+### Crear la imagen localmente
+
+```bash
+docker build -t patracamiguel/clima-api:latest .
+```
+
+### Publicar en Docker Hub
+
+```bash
+docker push patracamiguel/clima-api:latest
 ```
 
 ---

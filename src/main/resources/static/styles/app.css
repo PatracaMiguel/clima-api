@@ -200,6 +200,13 @@ input[type="password"]::-ms-clear {
 }
 
 .link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-decoration: none;
     width: 100%;
     margin-top: 10px;
 }
