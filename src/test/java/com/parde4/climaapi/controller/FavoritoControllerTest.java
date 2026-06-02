@@ -36,6 +36,7 @@ class FavoritoControllerTest {
     private static final String MENSAJE_FAVORITO_GUARDADO = "Favorito guardado correctamente";
     private static final String MENSAJE_GUARDAR_REQUIERE_SESION = "Debe iniciar sesion antes de guardar favoritos";
     private static final String MENSAJE_VER_REQUIERE_SESION = "Debe iniciar sesion antes de ver favoritos";
+    private static final String MENSAJE_FAVORITO_DUPLICADO = "La ciudad ya esta guardada en favoritos";
     private static final String MENSAJE_CIUDAD_NO_ENCONTRADA =
             "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
 
@@ -100,6 +101,25 @@ class FavoritoControllerTest {
                         """))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.mensaje").value(MENSAJE_CIUDAD_NO_ENCONTRADA));
+    }
+
+    @Test
+    void guardar_CiudadDuplicada_RetornaErrorDeNegocio() throws Exception {
+        when(favoritoService.guardarFavorito(any(Favorito.class)))
+                .thenThrow(new RuntimeException(MENSAJE_FAVORITO_DUPLICADO));
+
+        mockMvc.perform(post("/favoritos")
+                        .sessionAttr("usuarioId", USUARIO_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                          "ciudad": "Coatzacoalcos",
+                          "pais": "Mexico"
+                        }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Error de negocio"))
+                .andExpect(jsonPath("$.mensaje").value(MENSAJE_FAVORITO_DUPLICADO));
     }
 
     @Test

@@ -15,6 +15,11 @@ public class FavoritoService {
     private FavoritoRepository favoritoRepository;
 
     public Favorito guardarFavorito(Favorito favorito){
+        if (favoritoRepository.existsByUsuarioIdAndCiudadIgnoreCase(
+                favorito.getUsuarioId(), favorito.getCiudad())) {
+            throw new RuntimeException("La ciudad ya esta guardada en favoritos");
+        }
+
         favorito.setFechaAgregado(LocalDateTime.now());
         
         return favoritoRepository.save(favorito);

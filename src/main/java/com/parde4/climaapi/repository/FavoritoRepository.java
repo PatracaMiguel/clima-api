@@ -9,4 +9,6 @@ import com.parde4.climaapi.model.Favorito;
 
 public interface FavoritoRepository extends JpaRepository<Favorito, Integer>{
     List<Favorito> findByUsuarioId(Integer usuarioId);
+
+    boolean existsByUsuarioIdAndCiudadIgnoreCase(Integer usuarioId, String ciudad);
 }

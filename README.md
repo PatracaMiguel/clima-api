@@ -376,7 +376,7 @@ linux/arm64
 Esto permite ejecutarla en Linux y Mac
 
 ## Imagen en DockerHub
-https://hub.docker.com/repositories/patracamiguel
+https://hub.docker.com/r/patracamiguel/clima-api/tags 
 
 ## Variables de entorno
 
