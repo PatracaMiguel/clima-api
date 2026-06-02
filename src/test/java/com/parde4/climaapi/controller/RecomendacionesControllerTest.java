@@ -28,58 +28,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RecomendacionesControllerTest {
 
     private static final int USUARIO_ID = 1;
-    private static final String ROPA_CLEAR =
-            "Usa ropa fresca, ligera y de colores claros; una playera de algodon o lino y pantalon ligero funcionan bien.";
-    private static final String ACCESORIOS_CLEAR =
-            "Lleva lentes de sol, gorra o sombrero, protector solar y una botella de agua.";
-    private static final String MENSAJE_CLEAR =
-            "El cielo esta despejado; aprovecha el dia, pero protege tu piel y mantente hidratado.";
-    private static final String ROPA_RAIN =
-            "Usa impermeable o chamarra resistente al agua, pantalon que seque rapido y botas de lluvia o zapatos cerrados con suela antideslizante.";
-    private static final String ACCESORIOS_RAIN =
-            "Lleva sombrilla, mochila impermeable, una bolsa para proteger celular o documentos y una muda ligera si vas a estar mucho tiempo fuera.";
-    private static final String MENSAJE_RAIN =
-            "Hay lluvia; sal con tiempo, evita zonas encharcadas y cuida los cambios de temperatura.";
-    private static final String ROPA_TORMENTA =
-            "Usa impermeable, ropa comoda de secado rapido y calzado cerrado con buena suela.";
-    private static final String ACCESORIOS_TORMENTA =
-            "Lleva sombrilla resistente, mochila impermeable, linterna pequena y evita cargar objetos metalicos expuestos.";
-    private static final String MENSAJE_TORMENTA =
-            "Hay tormenta; si puedes, espera a que baje la intensidad y evita resguardarte debajo de arboles.";
-    private static final String ROPA_CLOUDS =
-            "Usa ropa comoda en capas: playera ligera y una chamarra delgada por si baja la temperatura.";
-    private static final String ACCESORIOS_CLOUDS =
-            "Lleva lentes de sol si hay resolana y una sombrilla compacta si las nubes se ven densas.";
-    private static final String MENSAJE_CLOUDS =
-            "El clima esta nublado; conviene salir preparado por si cambia durante el dia.";
-    private static final String ROPA_SNOW =
-            "Usa ropa termica, sueter grueso, chamarra abrigadora, pantalon resistente al frio y botas.";
-    private static final String ACCESORIOS_SNOW =
-            "Lleva guantes, gorro, bufanda, calcetines termicos y protector labial.";
-    private static final String MENSAJE_SNOW =
-            "Hay nieve; abrigate bien y camina con cuidado en superficies resbalosas.";
-    private static final String ROPA_BRUMA =
-            "Usa ropa comoda y una chamarra ligera si hay humedad o baja visibilidad.";
-    private static final String ACCESORIOS_BRUMA =
-            "Lleva cubrebocas si hay bruma, luces o reflejantes si caminas, y maneja con precaucion.";
-    private static final String MENSAJE_BRUMA =
-            "Hay niebla o bruma; reduce la velocidad, manten distancia y evita zonas con poca visibilidad.";
-    private static final String TEMP_CALUROSO =
-            "El dia esta caluroso: usa ropa ligera, colores claros, lentes de sol y toma agua durante el dia.";
-    private static final String TEMP_FRESCO =
-            "El clima esta fresco: usa ropa comoda y lleva una chamarra ligera si estaras fuera por la tarde o noche.";
-    private static final String TEMP_BAJO_CERO =
-            "La temperatura esta bajo cero: usa varias capas de ropa, abrigo grueso, guantes, gorro y bufanda.";
-    private static final String TEMP_FRIO =
-            "Hace frio: lleva sueter o chamarra, pantalon largo y calzado cerrado para evitar cambios bruscos de temperatura.";
-    private static final String TEMP_EXTREMA =
-            "La temperatura es extremadamente alta: evita el sol directo, usa ropa muy ligera y transpirable, toma agua constantemente y busca sombra o lugares ventilados.";
-    private static final String TEMP_MUCHO_CALOR =
-            "Hace mucho calor: usa ropa suelta y fresca, protector solar, lentes de sol, gorra y evita actividad pesada al aire libre.";
-    private static final String TEMP_CALIDO =
-            "La temperatura es calida y agradable: usa ropa ligera, pero no olvides protector solar si estaras al aire libre.";
+    private static final String SIN_MODIFICADORES = "";
     private static final String TEMP_FRIO_EXTREMO =
-            "Hace frio intenso: usa chamarra gruesa, sueter, pantalon largo, calcetines abrigadores y calzado cerrado.";
+            "Hace un frío extremo afuera. Usa ropa térmica seguido de un suéter grueso de lana y un abrigo térmico o parka impermeable. Usar pantalones abrigados, botas con suela antideslizante, gorro, bufanda y guantes impermeables.";
+    private static final String TEMP_FRIO_MODERADO =
+            "El día está bastante frío. Te recomendamos usar una camiseta de manga larga, un suéter o sudadera, y una chamarra, combínalo con jeans gruesos, botas o tenis cerrados de piel. Usar un gorro ligero y una bufanda.";
+    private static final String TEMP_TEMPLADO =
+            "El clima está fresco y agradable. Te recomendamos usar prendas fáciles de quitar y poner por si cambia el día. Una playera o camisa combinada con una chaqueta ligera como una chamarra de mezclilla o un blazer. Usa jeans o pantalones casuales y tenis.";
+    private static final String TEMP_CALIDO =
+            "Es un día cálido. Te recomendamos usar ropa fresca y transpirable de algodón o lino: playeras de manga corta, blusas ligeras, bermudas, shorts o vestidos cómodos. Usar tenis ligeros o sandalias, llevar tus lentes de sol y una gorra, si vas a caminar bajo el sol usa protector solar.";
+    private static final String TEMP_CALOR_EXTREMO =
+            "Calor extremo, te recomendamos mantenerte fresco con ropa muy holgada y de telas ultraligeras, preferentemente en colores claros para no absorber el calor. Usar shorts, faldas y playeras de tirantes, junto con sandalias abiertas. Es obligatorio usar protector solar, lentes de sol y una gorra.";
+    private static final String MODIFICADOR_LLUVIA =
+            "Alerta de lluvia: Asegúrate de llevar un paraguas resistente y una chamarra impermeable con capucha. Usa calzado impermeable.";
+    private static final String MODIFICADOR_NIEVE =
+            "Alerta de nieve: Usa ropa impermeable resistente al agua para que la nieve no te moje al derretirse. Usa botas con suela antideslizante para evitar resbalones en el hielo.";
+    private static final String MODIFICADOR_VIENTO =
+            "Alerta de viento: Te recomendamos usar una chaqueta rompevientos y evitar faldas o vestidos. Si tienes el cabello largo usa una liga o pinza.";
     private static final String MENSAJE_CIUDAD_NO_ENCONTRADA =
             "No se encontro informacion climatica para la ciudad ingresada , cheque bien el nombre e intente nuevamente.";
     private static final String MENSAJE_SESION_REQUERIDA =
@@ -98,7 +63,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(32.0, "Clear", "clear sky"));
 
         assertRecomendacion("Cancun", 32.0, "Clear", "clear sky",
-                ROPA_CLEAR, ACCESORIOS_CLEAR, MENSAJE_CLEAR + " " + TEMP_CALUROSO);
+                TEMP_CALOR_EXTREMO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -108,7 +73,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(18.0, "Rain", "light rain"));
 
         assertRecomendacion("Londres", 18.0, "Rain", "light rain",
-                ROPA_RAIN, ACCESORIOS_RAIN, MENSAJE_RAIN + " " + TEMP_FRESCO);
+                TEMP_TEMPLADO, MODIFICADOR_LLUVIA, MODIFICADOR_LLUVIA);
     }
 
     @Test
@@ -118,7 +83,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(20.0, "Thunderstorm", "thunderstorm"));
 
         assertRecomendacion("Xalapa", 20.0, "Thunderstorm", "thunderstorm",
-                ROPA_TORMENTA, ACCESORIOS_TORMENTA, MENSAJE_TORMENTA + " " + TEMP_FRESCO);
+                TEMP_TEMPLADO, MODIFICADOR_LLUVIA, MODIFICADOR_LLUVIA);
     }
 
     @Test
@@ -128,7 +93,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(19.0, "Clouds", "cloudy"));
 
         assertRecomendacion("Puebla", 19.0, "Clouds", "cloudy",
-                ROPA_CLOUDS, ACCESORIOS_CLOUDS, MENSAJE_CLOUDS + " " + TEMP_FRESCO);
+                TEMP_TEMPLADO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -138,7 +103,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(-1.0, "Snow", "snow"));
 
         assertRecomendacion("Toluca", -1.0, "Snow", "snow",
-                ROPA_SNOW, ACCESORIOS_SNOW, MENSAJE_SNOW + " " + TEMP_BAJO_CERO);
+                TEMP_FRIO_EXTREMO, MODIFICADOR_NIEVE, MODIFICADOR_NIEVE);
     }
 
     @Test
@@ -148,7 +113,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(14.0, "fog", "fog"));
 
         assertRecomendacion("Orizaba", 14.0, "fog", "fog",
-                ROPA_BRUMA, ACCESORIOS_BRUMA, MENSAJE_BRUMA + " " + TEMP_FRIO);
+                TEMP_TEMPLADO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -158,7 +123,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(40.0, "Clear", "clear sky"));
 
         assertRecomendacion("Mexicali", 40.0, "Clear", "clear sky",
-                ROPA_CLEAR, ACCESORIOS_CLEAR, MENSAJE_CLEAR + " " + TEMP_EXTREMA);
+                TEMP_CALOR_EXTREMO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -168,7 +133,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(35.0, "Clear", "clear sky"));
 
         assertRecomendacion("Hermosillo", 35.0, "Clear", "clear sky",
-                ROPA_CLEAR, ACCESORIOS_CLEAR, MENSAJE_CLEAR + " " + TEMP_MUCHO_CALOR);
+                TEMP_CALOR_EXTREMO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -178,7 +143,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(30.0, "Mist", "mist"));
 
         assertRecomendacion("Veracruz", 30.0, "Mist", "mist",
-                ROPA_BRUMA, ACCESORIOS_BRUMA, MENSAJE_BRUMA + " " + TEMP_CALUROSO);
+                TEMP_CALOR_EXTREMO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -188,7 +153,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(10.0, "Haze", "haze"));
 
         assertRecomendacion("Perote", 10.0, "Haze", "haze",
-                ROPA_BRUMA, ACCESORIOS_BRUMA, MENSAJE_BRUMA + " " + TEMP_FRIO);
+                TEMP_FRIO_MODERADO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -198,7 +163,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(24.0, "Clear", "clear sky"));
 
         assertRecomendacion("Merida", 24.0, "Clear", "clear sky",
-                ROPA_CLEAR, ACCESORIOS_CLEAR, MENSAJE_CLEAR + " " + TEMP_CALIDO);
+                TEMP_CALIDO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -208,7 +173,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(23.0, "Clouds", "cloudy"));
 
         assertRecomendacion("Queretaro", 23.0, "Clouds", "cloudy",
-                ROPA_CLOUDS, ACCESORIOS_CLOUDS, MENSAJE_CLOUDS + " " + TEMP_FRESCO);
+                TEMP_CALIDO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -218,7 +183,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(5.0, "Clear", "clear sky"));
 
         assertRecomendacion("Chihuahua", 5.0, "Clear", "clear sky",
-                ROPA_CLEAR, ACCESORIOS_CLEAR, MENSAJE_CLEAR + " " + TEMP_FRIO_EXTREMO);
+                TEMP_FRIO_MODERADO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -228,7 +193,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(25.0, "Drizzle", "drizzle"));
 
         assertRecomendacion("Cordoba", 25.0, "Drizzle", "drizzle",
-                ROPA_RAIN, ACCESORIOS_RAIN, MENSAJE_RAIN + " " + TEMP_CALIDO);
+                TEMP_CALIDO, MODIFICADOR_LLUVIA, MODIFICADOR_LLUVIA);
     }
 
     @Test
@@ -238,7 +203,7 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(17.0, "Mist", "mist"));
 
         assertRecomendacion("Coatepec", 17.0, "Mist", "mist",
-                ROPA_BRUMA, ACCESORIOS_BRUMA, MENSAJE_BRUMA + " " + TEMP_FRIO);
+                TEMP_TEMPLADO, SIN_MODIFICADORES, SIN_MODIFICADORES);
     }
 
     @Test
@@ -248,11 +213,21 @@ class RecomendacionesControllerTest {
                 .thenReturn(crearClima(0.0, "Snow", "snow"));
 
         assertRecomendacion("Nevado", 0.0, "Snow", "snow",
-                ROPA_SNOW, ACCESORIOS_SNOW, MENSAJE_SNOW + " " + TEMP_FRIO_EXTREMO);
+                TEMP_FRIO_MODERADO, MODIFICADOR_NIEVE, MODIFICADOR_NIEVE);
     }
 
     @Test
-    @DisplayName("REC-17 - GET /recomendaciones/{ciudad} con nombre de ciudad inexistente")
+    @DisplayName("REC-17 - GET /recomendaciones/{ciudad} con viento fuerte")
+    void recomendar_Clear18ConViento_RetornaModificadorViento() throws Exception {
+        when(weatherService.obtenerClimaPorCiudad("LaVentosa", null))
+                .thenReturn(crearClima(18.0, "Clear", "clear sky", 10.0));
+
+        assertRecomendacion("LaVentosa", 18.0, "Clear", "clear sky",
+                TEMP_TEMPLADO, MODIFICADOR_VIENTO, MODIFICADOR_VIENTO);
+    }
+
+    @Test
+    @DisplayName("REC-18 - GET /recomendaciones/{ciudad} con nombre de ciudad inexistente")
     void recomendar_CiudadInexistente_RetornaMensajeDeCiudadNoEncontrada() throws Exception {
         when(weatherService.obtenerClimaPorCiudad("CiudadInexistente", null))
                 .thenThrow(ciudadNoEncontrada());
@@ -263,7 +238,7 @@ class RecomendacionesControllerTest {
     }
 
     @Test
-    @DisplayName("REC-18 - GET /recomendaciones/{ciudad} sin iniciar sesion")
+    @DisplayName("REC-19 - GET /recomendaciones/{ciudad} sin iniciar sesion")
     void recomendar_SinSesion_DebeIniciarSesion() throws Exception {
         mockMvc.perform(get("/recomendaciones/Cancun"))
                 .andExpect(status().isBadRequest())
@@ -291,6 +266,10 @@ class RecomendacionesControllerTest {
     }
 
     private WeatherResponseDTO crearClima(double temperatura, String clima, String descripcion) {
+        return crearClima(temperatura, clima, descripcion, null);
+    }
+
+    private WeatherResponseDTO crearClima(double temperatura, String clima, String descripcion, Double velocidadViento) {
         WeatherResponseDTO response = new WeatherResponseDTO();
 
         WeatherResponseDTO.MainData mainData = new WeatherResponseDTO.MainData();
@@ -301,6 +280,12 @@ class RecomendacionesControllerTest {
         weather.setMain(clima);
         weather.setDescription(descripcion);
         response.setWeather(List.of(weather));
+
+        if (velocidadViento != null) {
+            WeatherResponseDTO.Wind wind = new WeatherResponseDTO.Wind();
+            wind.setSpeed(velocidadViento);
+            response.setWind(wind);
+        }
 
         return response;
     }

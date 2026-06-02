@@ -10,6 +10,7 @@ public class WeatherResponseDTO {
     private MainData main;
     private List<Weather> weather;
     private Sys sys;
+    private Wind wind;
 
     @Data
     public static class MainData {
@@ -26,5 +27,10 @@ public class WeatherResponseDTO {
     @Data
     public static class Sys {
         private String country;
+    }
+
+    @Data
+    public static class Wind {
+        private double speed;
     }
 }
