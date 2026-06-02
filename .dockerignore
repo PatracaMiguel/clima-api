@@ -1,0 +1,13 @@
+target/
+.git/
+.github/
+.vscode/
+.idea/
+logs/
+*.log
+.env
+*.env
+README.md
+postman/
+.postman/
+ClimaApiApplicationTests.class

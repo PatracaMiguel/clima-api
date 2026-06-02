@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesion - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css?v=6">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-panel" aria-live="polite">
+            <div class="auth-shell">
+                <h1 class="auth-logo">Clima API</h1>
+
+                <form id="login-form" class="auth-form">
+                    <h2>Iniciar sesion</h2>
+
+                    <label for="login-correo">Correo</label>
+                    <input id="login-correo" name="correo" type="email" autocomplete="email" required>
+
+                    <label for="login-contrasena">Contrasena</label>
+                    <div class="password-row">
+                        <input id="login-contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+                        <button class="password-toggle" type="button" data-toggle-password="login-contrasena">Mostrar</button>
+                    </div>
+
+                    <p id="login-message" class="message"></p>
+
+                    <button type="submit">Iniciar sesion</button>
+                    <a class="link-button auth-link" href="/registro.html">Crear cuenta</a>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="/scripts/login.js?v=1"></script>
+</body>
+</html>

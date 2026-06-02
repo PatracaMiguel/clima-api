@@ -1,0 +1,15 @@
+package com.parde4.climaapi.dto;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class UsuarioResponseDTO {
+
+    private Integer id;
+    private String nombre;
+    private String correo;
+    private LocalDateTime fechaCreado;
+    private String mensaje;
+}

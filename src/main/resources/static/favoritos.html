@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Favoritos - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css?v=2">
+    <style>
+        body {
+            background: #edf4f2;
+            margin: 0;
+            min-height: 100vh;
+            font-family: inherit;
+            color: inherit;
+        }
+
+        .topbar {
+            background: #0284C7;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px 20px;
+            box-shadow: 0 2px 6px rgba(23,49,61,0.12);
+        }
+
+        .topbar .back-button {
+            position: static !important;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.16);
+            color: #ffffff;
+            min-width: 160px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 48px 16px;
+            min-height: calc(100vh - 64px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 960px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 18px 50px rgba(23, 49, 61, 0.08);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .header-row h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #17313d;
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .fav-item {
+            padding: 14px;
+            border-radius: 8px;
+            background: #f8fbfb;
+            border: 1px solid #d7e6e4;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .fav-title {
+            font-weight: 800;
+            color: #17313d;
+            font-size: 18px;
+            margin: 0 0 4px;
+        }
+
+        .fav-sub {
+            color: #60717a;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .fav-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .fav-actions button {
+            flex: 1;
+            min-height: 40px;
+            border-radius: 6px;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #60717a;
+            padding: 28px;
+            border: 1px dashed #d7e6e4;
+            border-radius: 8px;
+            background: #f8fbfb;
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 20px;
+            }
+
+            .fav-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar" role="banner">
+        <button id="back-button" class="back-button" type="button">Volver a buscador</button>
+    </header>
+
+    <main class="container" role="main">
+        <section class="card" aria-live="polite">
+            <div class="header-row">
+                <div>
+                    <p class="eyebrow">Favoritos</p>
+                    <h1>Tus ciudades favoritas</h1>
+                </div>
+            </div>
+
+            <p id="favorites-message" class="message"></p>
+            <div id="favorites-grid" class="favorites-grid"></div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        function readJson(response) {
+            return response.text().then((text) => {
+                if (!text) return {};
+                try { return JSON.parse(text); } catch (e) { return { mensaje: text }; }
+            });
+        }
+
+        function errorMessage(body) {
+            if (!body) return "Ocurrio un error.";
+            if (body.mensaje) return body.mensaje;
+            if (body.mensajes) return Object.values(body.mensajes).join(" ");
+            return "Ocurrio un error.";
+        }
+
+        function setMessage(el, text, type) {
+            el.textContent = text;
+            el.classList.remove("success", "error");
+            if (type) el.classList.add(type);
+        }
+
+        async function requestJson(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    method: options.method || "GET",
+                    headers: options.body ? { "Content-Type": "application/json" } : {},
+                    credentials: "same-origin",
+                    body: options.body ? JSON.stringify(options.body) : undefined
+                });
+
+                const data = await readJson(response);
+
+                if (!response.ok) {
+                    return { ok: false, data, message: errorMessage(data) };
+                }
+
+                return { ok: true, data, message: "" };
+            } catch (e) {
+                return { ok: false, data: {}, message: "No se pudo conectar con la API." };
+            }
+        }
+
+        const backButton = document.querySelector("#back-button");
+        const messageEl = document.querySelector("#favorites-message");
+        const gridEl = document.querySelector("#favorites-grid");
+
+        backButton.addEventListener("click", () => {
+            window.location.href = "/consulta.html";
+        });
+
+        function getStoredUser() {
+            try {
+                return JSON.parse(localStorage.getItem("climaUsuario"));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function loadFavorites() {
+            const sessionUser = getStoredUser();
+            if (!sessionUser) {
+                window.location.href = "/index.html";
+                return;
+            }
+
+            setMessage(messageEl, "Cargando favoritos...", "");
+            gridEl.innerHTML = "";
+
+            const response = await requestJson("/favoritos");
+            if (!response.ok) {
+                const message = response.message || "No se pudieron cargar los favoritos.";
+                setMessage(messageEl, message, "error");
+                if (message.toLowerCase().includes("iniciar sesion")) {
+                    localStorage.removeItem("climaUsuario");
+                    window.location.href = "/index.html";
+                }
+                return;
+            }
+
+            renderFavorites(Array.isArray(response.data) ? response.data : []);
+            setMessage(messageEl, "", "");
+        }
+
+        function renderFavorites(items) {
+            if (!items.length) {
+                gridEl.innerHTML = '<div class="empty">No tienes ciudades favoritas aun.</div>';
+                return;
+            }
+
+            gridEl.innerHTML = items.map((fav) => {
+                const id = fav.id ?? "";
+                const ciudad = fav.ciudad ?? "";
+                const pais = fav.pais ?? "";
+                return `
+                    <div class="fav-item" data-id="${escapeHtml(id)}" data-ciudad="${escapeHtml(ciudad)}">
+                        <div>
+                            <p class="fav-title">${escapeHtml(ciudad)}</p>
+                            <p class="fav-sub">${escapeHtml(pais)}</p>
+                        </div>
+                        <div class="fav-actions">
+                            <button class="view-btn" type="button">Ver clima</button>
+                            <button class="del-btn link-button" type="button">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            gridEl.querySelectorAll(".view-btn").forEach((button) => {
+                button.addEventListener("click", (event) => {
+                    const card = event.target.closest(".fav-item");
+                    const ciudad = card.getAttribute("data-ciudad") || "";
+                    if (ciudad) {
+                        localStorage.setItem("climaCiudadPendiente", ciudad);
+                    }
+                    window.location.href = "/consulta.html";
+                });
+            });
+
+            gridEl.querySelectorAll(".del-btn").forEach((button) => {
+                button.addEventListener("click", async (event) => {
+                    const card = event.target.closest(".fav-item");
+                    const id = card.getAttribute("data-id");
+                    if (!id) return;
+
+                    button.disabled = true;
+                    const response = await requestJson(`/favoritos/${encodeURIComponent(id)}`, { method: "DELETE" });
+                    button.disabled = false;
+
+                    if (!response.ok) {
+                        setMessage(messageEl, response.message || "No se pudo eliminar el favorito.", "error");
+                        return;
+                    }
+
+                    await loadFavorites();
+                });
+            });
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "\"": "&quot;",
+                "'": "&#039;"
+            })[character]);
+        }
+
+        loadFavorites();
+    })();
+    </script>
+</body>
+</html>

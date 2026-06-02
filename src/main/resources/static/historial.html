@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Historial - Clima API</title>
+    <link rel="stylesheet" href="/styles/app.css">
+    <style>
+        body {
+            background: #edf4f2;
+            margin: 0;
+            min-height: 100vh;
+            font-family: inherit;
+            color: inherit;
+        }
+        .topbar {
+            background: #0284C7;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px 20px;
+            box-shadow: 0 2px 6px rgba(23,49,61,0.12);
+        }
+        .brand {
+            color: #0284C7;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+        .topbar .logout-button {
+            position: static;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.16);
+            color: #ffffff;
+            min-width: 160px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 16px;
+            min-height: calc(100vh - 64px);
+        }
+        .card {
+            width: 100%;
+            max-width: 860px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 18px 50px rgba(23, 49, 61, 0.12);
+        }
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .card-header h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+        }
+        .subcopy {
+            margin: 0;
+            color: #60717a;
+            line-height: 1.45;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-actions button {
+            min-width: 140px;
+        }
+        .danger-button {
+            border-color: #f5c2c7;
+            color: #b42318;
+        }
+        .danger-button:hover {
+            background: #fdecee;
+        }
+        .history-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: #f8fbfb;
+            border: 1px solid #e1ecea;
+        }
+        .history-city {
+            margin: 0 0 4px;
+            font-weight: 800;
+            color: #17313d;
+        }
+        .history-meta {
+            margin: 0;
+            color: #60717a;
+            font-size: 13px;
+        }
+        .history-temp {
+            font-size: 22px;
+            font-weight: 800;
+            color: #17313d;
+            white-space: nowrap;
+        }
+        .empty-state {
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60717a;
+            background: #f8fbfb;
+            border-radius: 8px;
+            border: 1px dashed #d7e6e4;
+        }
+        @media (max-width: 720px) {
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-actions button {
+                width: 100%;
+            }
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .history-temp {
+                align-self: flex-end;
+            }
+        }
+        @media (max-width: 520px) {
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar" role="banner">
+        <div class="brand">Clima API</div>
+        <div>
+            <button id="back-button" class="logout-button" type="button">Volver a buscador</button>
+        </div>
+    </header>
+
+    <main class="container" role="main">
+        <section class="card" aria-live="polite">
+            <div class="card-header">
+                <div>
+                    <p class="eyebrow">Historial</p>
+                    <h1>Consultas recientes</h1>
+                    <p class="subcopy">Aqui puedes revisar las ultimas consultas de clima guardadas.</p>
+                </div>
+                <div class="header-actions">
+                    <button id="clear-button" class="link-button danger-button" type="button">Limpiar historial</button>
+                </div>
+            </div>
+
+            <p id="history-message" class="message"></p>
+            <div id="history-list" class="history-list empty-state">Cargando historial...</div>
+        </section>
+    </main>
+
+    <script>
+    (function () {
+        function readJson(response) {
+            return response.text().then((text) => {
+                if (!text) return {};
+                try { return JSON.parse(text); } catch (e) { return { mensaje: text }; }
+            });
+        }
+
+        function errorMessage(body) {
+            if (!body) return "Ocurrio un error.";
+            if (body.mensaje) return body.mensaje;
+            if (body.mensajes) return Object.values(body.mensajes).join(" ");
+            return "Ocurrio un error.";
+        }
+
+        function setMessage(el, text, type) {
+            el.textContent = text;
+            el.classList.remove("success", "error");
+            if (type) el.classList.add(type);
+        }
+
+        async function requestJson(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    method: options.method || "GET",
+                    headers: options.body ? { "Content-Type": "application/json" } : {},
+                    credentials: "same-origin",
+                    body: options.body ? JSON.stringify(options.body) : undefined
+                });
+
+                const data = await readJson(response);
+
+                if (!response.ok) {
+                    return { ok: false, data, message: errorMessage(data) };
+                }
+
+                return { ok: true, data, message: "" };
+            } catch (e) {
+                return { ok: false, data: {}, message: "No se pudo conectar con la API." };
+            }
+        }
+
+        function formatTemp(value) {
+            if (value === null || value === undefined || Number.isNaN(Number(value))) {
+                return "--";
+            }
+            return `${Math.round(Number(value))} C`;
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "Fecha no disponible";
+            }
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+            return new Intl.DateTimeFormat("es-MX", {
+                dateStyle: "medium",
+                timeStyle: "short",
+                hourCycle: "h23"
+            }).format(date);
+        }
+
+        const listEl = document.querySelector("#history-list");
+        const messageEl = document.querySelector("#history-message");
+        const clearButton = document.querySelector("#clear-button");
+        const backButton = document.querySelector("#back-button");
+
+        backButton.addEventListener("click", () => {
+            window.location.href = "/consulta.html";
+        });
+
+        clearButton.addEventListener("click", async () => {
+            clearButton.disabled = true;
+            setMessage(messageEl, "Eliminando historial...", "");
+
+            const response = await requestJson("/historial", { method: "DELETE" });
+
+            clearButton.disabled = false;
+
+            if (!response.ok) {
+                setMessage(messageEl, response.message || "No se pudo eliminar el historial.", "error");
+                return;
+            }
+
+            setMessage(messageEl, response.data?.mensaje || "Historial eliminado.", "success");
+            renderHistory([]);
+        });
+
+        function renderHistory(items) {
+            if (!Array.isArray(items) || items.length === 0) {
+                listEl.className = "history-list empty-state";
+                listEl.textContent = "Aun no hay consultas guardadas.";
+                return;
+            }
+
+            listEl.className = "history-list";
+            listEl.innerHTML = items.map((item) => {
+                const ciudad = item.ciudad || "Ciudad sin nombre";
+                const fecha = formatDate(item.fechaConsulta);
+                const temperatura = formatTemp(item.temperatura);
+                return `
+                    <div class="history-item">
+                        <div>
+                            <p class="history-city">${escapeHtml(ciudad)}</p>
+                            <p class="history-meta">${escapeHtml(fecha)}</p>
+                        </div>
+                        <div class="history-temp">${escapeHtml(temperatura)}</div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderSessionCta(message) {
+            listEl.className = "history-list empty-state";
+            listEl.innerHTML = `
+                <div>
+                    <p>${escapeHtml(message || "Debes iniciar sesion para ver tu historial.")}</p>
+                    <button class="link-button" type="button" onclick="location.href='/index.html'">Ir al inicio de sesion</button>
+                </div>
+            `;
+        }
+
+        async function loadHistory() {
+            setMessage(messageEl, "Cargando historial...", "");
+            const response = await requestJson("/historial");
+
+            if (!response.ok) {
+                const message = response.message || "No se pudo cargar el historial.";
+                if (message.toLowerCase().includes("iniciar sesion")) {
+                    setMessage(messageEl, message, "error");
+                    renderSessionCta(message);
+                    return;
+                }
+                setMessage(messageEl, message, "error");
+                renderHistory([]);
+                return;
+            }
+
+            setMessage(messageEl, "", "");
+            renderHistory(response.data || []);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "\"": "&quot;",
+                "'": "&#039;"
+            })[character]);
+        }
+
+        loadHistory();
+    })();
+    </script>
+</body>
+</html>

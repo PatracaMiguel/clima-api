@@ -12,12 +12,13 @@ Además, permite a los usuarios registrarse, iniciar sesión, guardar ciudades f
 
 ## Arquitectura del sistema
 
-El sistema está diseñado bajo una arquitectura basada en servicios REST:
+El sistema utiliza una arquitectura en capas y expone sus funcionalidades mediante una API REST.
+* Capa de presentación recibe las peticiones , valida los datos y devuelve una respuesta 
+* Capa de negocio: controla todo el comportamiento del sistema  
+* Capa de persistencia: acceso a la BD
+* OpenWeatherMap: servicio externo integrado en la capa de negocio
 
-* Cliente (Postman o frontend)
-* API REST: desarrollada con Spring Boot, procesa las solicitudes y genera respuestas
-* API externa (OpenWeatherMap): utilizada para obtener datos climáticos en tiempo real  
-* Contenedores Docker
+<img width="561" height="738" alt="image" src="https://github.com/user-attachments/assets/98ab04f5-65d7-417a-bec2-0dbeb1750a9c" />
 
 ---
 
@@ -32,37 +33,55 @@ El sistema está diseñado bajo una arquitectura basada en servicios REST:
 * GitHub Actions (CI/CD)
 * Postman
 * OpenWeatherMap API
-
 ---
 
-## Variables de entorno
+## Organización del trabajo por ramas
 
-El proyecto utiliza variables de entorno para proteger información sensible.
+Para el desarrollo del proyecto se utilizó una estrategia de trabajo por ramas en GitHub. Esto permitió que cada integrante implementara una funcionalidad específica sin afectar directamente el trabajo de los demás.
 
-Ejemplo de archivo `.env.example`:
+### Ramas creadas
 
-```
-OPENWEATHER_API_KEY=
-DB_URL=
-DB_USERNAME=
-DB_PASSWORD=
-```
+* `develop`
+  Rama de integración del proyecto. Aquí se concentran los avances validados antes de pasar a una rama principal.
+
+* `feature/estructura-base`
+  Se utilizó para construir la estructura inicial del proyecto, incluyendo la base del backend y la organización principal del repositorio.
+
+* `feature/clima`
+  Creada para desarrollar la funcionalidad relacionada con la consulta de clima.
+
+* `feature/auth`
+  Destinada a la autenticación de usuarios.
+
+* `feature/recomendaciones`
+  Usada para implementar la generación de recomendaciones de vestimenta con base en el clima.
+
+* `feature/ci-cd`
+  Utilizada para configurar el pipeline de integración y despliegue continuo con GitHub Actions.
+
+* `feature/usuarios`
+  Creada para el desarrollo del módulo de usuarios, incluyendo endpoints para crear y consultar usuarios.
+
+* `feature/favoritos`
+  Utilizada para implementar la funcionalidad de favoritos, permitiendo registrar ciudades favoritas asociadas a un usuario.
+
+* `feature/conexion-openweathermap`
+  Enfocada en la integración con la API externa OpenWeatherMap.
 
 ---
-
 ## Endpoints de la API
 
 ### Clima
 
 #### Obtener clima actual
 
-```
+```http
 GET /clima/{ciudad}
 ```
 
 #### Obtener clima extendido
 
-```
+```http
 GET /clima/{ciudad}/extendido
 ```
 
@@ -70,9 +89,9 @@ GET /clima/{ciudad}/extendido
 
 ### Recomendaciones
 
-#### Obtener recomendaciones por ciudad
+#### Obtener recomendaciones de vestimenta según el clima de una ciudad.
 
-```
+```http
 GET /recomendaciones/{ciudad}
 ```
 
@@ -80,32 +99,16 @@ GET /recomendaciones/{ciudad}
 
 ### Favoritos
 
-#### Agregar ciudad a favoritos
+#### Crear favorito
 
-```
-POST /usuarios/{id}/favoritos
-```
-
-#### Eliminar ciudad de favoritos
-
-```
-DELETE /usuarios/{id}/favoritos/{favoritoId}
+```http
+POST /favoritos
 ```
 
 #### Listar favoritos
 
-```
-GET /usuarios/{id}/favoritos
-```
-
----
-
-### Ciudades
-
-#### Buscar ciudades
-
-```
-GET /ciudades?nombre={nombre}
+```http
+GET /favoritos
 ```
 
 ---
@@ -114,77 +117,155 @@ GET /ciudades?nombre={nombre}
 
 #### Crear usuario
 
-```
+```http
 POST /usuarios
 ```
 
 #### Obtener usuario
 
-```
+```http
 GET /usuarios/{id}
 ```
 
 ---
+## Historial de consultas
+
+El sistema guarda automáticamente un historial de las consultas climáticas realizadas.
+
+Cada vez que se consulta:
+
+GET /clima/{ciudad}
+
+se almacena:
+
+- ciudad consultada
+- temperatura obtenida
+- fecha y hora de consulta
+
 
 ## Base de datos
 
-El sistema utiliza MySQL para almacenar la información de usuarios, ciudades favoritas y un historial de consultas.
+El sistema utiliza **MySQL** como base de datos.
 
-### Tablas principales
+### ¿Por qué se utilizó MySQL?
 
-#### Usuario
+Se eligió MySQL porque el proyecto maneja información estructurada y relaciones claras entre entidades. En este caso, los usuarios se relacionan con sus favoritos y con su historial de consultas.
 
-Almacena la información de los usuarios del sistema.
+* La información se organiza en tablas
+* Cada tabla contiene filas y columnas
+* Las tablas pueden relacionarse entre sí mediante claves primarias y foráneas
 
-* idusuario
-* nombre
-* correo
-* contraseña
-* fecha_creado
+Este tipo de base de datos fue adecuado para el proyecto porque permite controlar relaciones como:
 
----
-
-#### Favorito
-
-Guarda las ciudades favoritas de cada usuario.
-
-* idfavorito
-* ciudad
-* pais
-* fecha_agregado
-* usuario_idusuario
+* un usuario puede tener muchos favoritos
+* un usuario puede tener muchos registros en su historial
 
 ---
 
-#### Historial
+## Modelo entidad-relación
 
-Registra las consultas de clima realizadas por los usuarios.
+<img width="706" height="245" alt="Captura de pantalla 2026-04-19 a la(s) 21 32 59" src="https://github.com/user-attachments/assets/7d39a75e-abb8-409b-bb4d-860857c9e711" />
 
-* idhistorial
-* ciudad
-* fecha_consulta
-* usuario_idusuario
+El modelo está compuesto por tres tablas principales:
+
+### 1. Usuario
+
+La tabla `usuario` representa a cada usuario registrado en el sistema.
+
+Campos principales:
+
+* `idusuario`
+* `nombre`
+* `correo`
+* `contraseña`
+* `fecha_creado`
+
+Esta es la entidad principal del sistema.
 
 ---
 
-### Relaciones
+### 2. Favorito
 
-* Un usuario puede tener múltiples ciudades favoritas
-* Un usuario puede tener múltiples registros en el historial
+La tabla `favorito` almacena las ciudades favoritas guardadas por los usuarios.
 
-Estas relaciones se implementan mediante llaves foráneas.
+Campos principales:
+
+* `idfavorito`
+* `ciudad`
+* `pais`
+* `fecha_agregado`
+* `usuario_idusuario`
+
+La columna `usuario_idusuario` funciona como clave foránea y conecta cada favorito con un usuario.
 
 ---
 
-## Ejecución con Docker
+### 3. Historial
 
-### Construir y levantar contenedores
+La tabla `historial` registra las consultas de clima realizadas por los usuarios.
+
+Campos principales:
+
+* `idhistorial`
+* `ciudad`
+* `fecha_consulta`
+* `usuario_idusuario`
+
+Al igual que en `favorito`, la columna `usuario_idusuario` relaciona cada registro del historial con un usuario.
+
+---
+
+## Ejecucion con Docker Compose
+
+El proyecto queda listo para levantarse con un solo comando. Docker Compose construye la imagen de la aplicacion, descarga la imagen de MySQL y expone el frontend en:
+
+```text
+http://localhost:8080
+```
+
+### Levantar el sistema
+
+```bash
+docker compose up
+```
+
+Si quieres forzar la reconstruccion de la imagen despues de cambiar codigo, usa:
 
 ```bash
 docker compose up --build
 ```
 
+### Variables de entorno
+
+Docker Compose usa valores por defecto para desarrollo local. Si quieres usar tus propias credenciales, copia `.env.example` a `.env` y cambia los valores:
+
+```bash
+DB_PASSWORD=parde4
+WEATHER_API_KEY=tu_api_key_de_openweathermap
+```
+
+### Crear la imagen localmente
+
+```bash
+docker build -t patracamiguel/clima-api:latest .
+```
+
+### Publicar en Docker Hub
+
+```bash
+docker push patracamiguel/clima-api:latest
+```
+
 ---
+
+## Imagen de la base de datos
+
+Se creó una imagen personalizada basada en MySQL que incluye:
+
+* Creación automática de la base de datos `clima_app`
+* Configuración de credenciales
+* Ejecución del script inicial `ClimaApp.sql`
+* Estructura de tablas (`usuario`, `favorito`, `historial`)
 
 ## Pipeline CI/CD
 
@@ -196,16 +277,31 @@ El proyecto utiliza GitHub Actions para automatizar:
 
 Cada push al repositorio ejecuta automáticamente el pipeline.
 
----
-
 ## Estructura del proyecto
 
+El proyecto sigue una arquitectura por capas de Spring Boot, permitiendo separar responsabilidades y mantener el código organizado.
+
 ```
-mi-api/
-├── .github/workflows/
+clima-api/
 ├── src/
-├── Dockerfile
-├── docker-compose.yml
-├── .env.example
+│   ├── main/java/com/parde4/climaapi/
+│   │   ├── controller/  
+│   │   ├── dto/            
+│   │   ├── exception/     
+│   │   ├── model/          
+│   │   ├── repository/   
+│   │   ├── service/        
+│   │   └── ClimaApiApplication.java 
+│   │
+│   ├── resources/
+│   │   └── application.yaml 
+│
+│   ├── test/              
+│
+├── docker-compose.yml     
+├── pom.xml          
 ├── README.md
 ```
+
+## Imagen en DockerHub
+https://hub.docker.com/repositories/patracamiguel
