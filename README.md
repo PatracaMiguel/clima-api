@@ -8,7 +8,26 @@ A diferencia de otras aplicaciones meteorológicas, el sistema no solo muestra d
 
 Además, permite a los usuarios registrarse, iniciar sesión, guardar ciudades favoritas y consultar su historial de búsquedas.
 
+## Ramas principales
+
+- `main`: rama final del proyecto.
+- `develop`: rama de integración.
+- `feature/*`: ramas de funcionalidades específicas.
+
+Ramas destacadas:
+
+- `feature/estructura-base`
+- `feature/auth`
+- `feature/clima`
+- `feature/recomendaciones`
+- `feature/favoritos`
+- `feature/historial`
+- `feature/usuarios`
+- `feature/Imagen-Docker`
+- `feature/ci-cd`
+
 ---
+
 
 ## Arquitectura del sistema
 
@@ -22,10 +41,42 @@ El sistema utiliza una arquitectura en capas y expone sus funcionalidades median
 
 ---
 
+## Estructura general
+
+```text
+clima-api/
++-- src/
+|   +-- main/
+|   |   +-- java/com/parde4/climaapi/
+|   |   |   +-- controller/
+|   |   |   +-- dto/
+|   |   |   +-- exception/
+|   |   |   +-- model/
+|   |   |   +-- repository/
+|   |   |   +-- service/
+|   |   |   +-- ClimaApiApplication.java
+|   |   +-- resources/
+|   |       +-- application.yaml
+|   |       +-- static/
+|   +-- test/
+|       +-- java/com/parde4/climaapi/
++-- postman/
+|   +-- Clima-API.postman_collection.json
++-- docker-compose.yml
++-- Dockerfile
++-- pom.xml
++-- README.md
+```
+
+---
+
 ## Tecnologías utilizadas
 
 * Java 17
-* Spring Boot
+* Spring Boot 4.0.5
+* Spring Web
+* Spring Data JPA
+* Spring Validation
 * Maven
 * MySQL
 * Docker y Docker Compose
@@ -35,113 +86,105 @@ El sistema utiliza una arquitectura en capas y expone sus funcionalidades median
 * OpenWeatherMap API
 ---
 
-## Organización del trabajo por ramas
-
-Para el desarrollo del proyecto se utilizó una estrategia de trabajo por ramas en GitHub. Esto permitió que cada integrante implementara una funcionalidad específica sin afectar directamente el trabajo de los demás.
-
-### Ramas creadas
-
-* `develop`
-  Rama de integración del proyecto. Aquí se concentran los avances validados antes de pasar a una rama principal.
-
-* `feature/estructura-base`
-  Se utilizó para construir la estructura inicial del proyecto, incluyendo la base del backend y la organización principal del repositorio.
-
-* `feature/clima`
-  Creada para desarrollar la funcionalidad relacionada con la consulta de clima.
-
-* `feature/auth`
-  Destinada a la autenticación de usuarios.
-
-* `feature/recomendaciones`
-  Usada para implementar la generación de recomendaciones de vestimenta con base en el clima.
-
-* `feature/ci-cd`
-  Utilizada para configurar el pipeline de integración y despliegue continuo con GitHub Actions.
-
-* `feature/usuarios`
-  Creada para el desarrollo del módulo de usuarios, incluyendo endpoints para crear y consultar usuarios.
-
-* `feature/favoritos`
-  Utilizada para implementar la funcionalidad de favoritos, permitiendo registrar ciudades favoritas asociadas a un usuario.
-
-* `feature/conexion-openweathermap`
-  Enfocada en la integración con la API externa OpenWeatherMap.
-
 ---
-## Endpoints de la API
+## Endpoints
+
+### Auth
+
+```http
+POST /auth/login
+POST /auth/logout
+```
+
+### Usuarios
+
+```http
+POST /usuarios
+GET /usuarios/{id}
+PUT /usuarios/{id}
+PATCH /usuarios/{id}
+DELETE /usuarios/{id}
+```
 
 ### Clima
 
-#### Obtener clima actual
-
 ```http
 GET /clima/{ciudad}
+GET /clima/{ciudad}/pronostico
 ```
 
-#### Obtener clima extendido
-
-```http
-GET /clima/{ciudad}/extendido
-```
-
----
+Los endpoints de clima requieren iniciar sesión previamente.
 
 ### Recomendaciones
-
-#### Obtener recomendaciones de vestimenta según el clima de una ciudad.
 
 ```http
 GET /recomendaciones/{ciudad}
 ```
 
+Este endpoint requiere iniciar sesion previamente.
+
+
+El sistema genera recomendaciones con base en rangos de temperatura:
+
+- Frio extremo: menos de 0 C.
+- Frio moderado: de 0 C a 12 C.
+- Templado/fresco: de 13 C a 20 C.
+- Calido: de 21 C a 28 C.
+- Calor extremo: mas de 28 C.
+
+Tambien agrega alertas cuando aplica:
+
+- Lluvia: paraguas, chamarra impermeable y calzado impermeable.
+- Nieve/hielo: ropa impermeable y botas con suela antideslizante.
+- Viento fuerte: chaqueta rompevientos y recomendaciones adicionales.
+
 ---
 
 ### Favoritos
 
-#### Crear favorito
-
 ```http
 POST /favoritos
-```
-
-#### Listar favoritos
-
-```http
 GET /favoritos
+DELETE /favoritos/{id}
 ```
+
+Los endpoints de favoritos requieren iniciar sesion previamente.
+
+### Historial
+
+```http
+GET /historial
+DELETE /historial
+```
+
+Los endpoints de historial requieren iniciar sesion previamente.
 
 ---
 
-### Usuarios
+## Coleccion de endpoints
 
-#### Crear usuario
+La documentacion tecnica interactiva se encuentra en la coleccion de Postman:
 
-```http
-POST /usuarios
+```text
+postman/Clima-API.postman_collection.json
 ```
 
-#### Obtener usuario
+Para utilizarla:
 
-```http
-GET /usuarios/{id}
+1. Abrir Postman.
+2. Seleccionar `Import`.
+3. Cargar el archivo `postman/Clima-API.postman_collection.json`.
+4. Ejecutar primero `Usuarios > Crear usuario`.
+5. Ejecutar `Auth > Login`.
+6. Probar los endpoints protegidos.
+
+La variable `baseUrl` viene configurada como:
+
+```text
+http://localhost:8080
 ```
 
 ---
-## Historial de consultas
-
-El sistema guarda automáticamente un historial de las consultas climáticas realizadas.
-
-Cada vez que se consulta:
-
-GET /clima/{ciudad}
-
-se almacena:
-
-- ciudad consultada
-- temperatura obtenida
-- fecha y hora de consulta
-
 
 ## Base de datos
 
@@ -215,48 +258,82 @@ Al igual que en `favorito`, la columna `usuario_idusuario` relaciona cada regist
 
 ---
 
-## Ejecucion con Docker Compose
+## Ejecucion local con Maven
 
-El proyecto queda listo para levantarse con un solo comando. Docker Compose construye la imagen de la aplicacion, descarga la imagen de MySQL y expone el frontend en:
+Primero se debe tener MySQL disponible en `localhost:3307`.
 
-```text
-http://localhost:8080
+Con Docker se puede levantar solo la base de datos:
+
+```bash
+docker compose up -d mysql
 ```
 
-### Levantar el sistema
+Despues ejecutar la aplicación:
+
+```bash
+mvn spring-boot:run
+```
+
+La aplicación quedara disponible en: http://localhost:8080
+
+## Ejecucion con Docker Compose 
+
+Para levantar base de datos y aplicación:
 
 ```bash
 docker compose up
 ```
 
-Si quieres forzar la reconstruccion de la imagen despues de cambiar codigo, usa:
-
-```bash
-docker compose up --build
+Para descargar la versión más reciente ejecuta 
+docker compose pull
+docker compose up
 ```
 
-### Variables de entorno
+La aplicación queda disponible en:
 
-Docker Compose usa valores por defecto para desarrollo local. Si quieres usar tus propias credenciales, copia `.env.example` a `.env` y cambia los valores:
-
-```bash
-DB_PASSWORD=parde4
-WEATHER_API_KEY=tu_api_key_de_openweathermap
+```text
+http://localhost:8080
 ```
 
-### Crear la imagen localmente
+## Ejecucion sin código fuente
+
+Una persona que no tenga el código puede ejecutar el sistema usando las imagenes publicadas.
+
+Crear la red:
 
 ```bash
-docker build -t patracamiguel/clima-api:latest .
+docker network create clima-net
 ```
 
-### Publicar en Docker Hub
+Levantar la base de datos:
 
 ```bash
-docker push patracamiguel/clima-api:latest
+docker run -d --name clima_db --network clima-net -p 3307:3306 elisasc/clima-db
 ```
 
----
+Bajar la imagen de la API:
+
+```bash
+docker pull patracamiguel/clima-api:4.0
+```
+
+Levantar la API:
+
+```bash
+docker run -d --name clima_app --network clima-net -p 8080:8080 patracamiguel/clima-api:4.0
+```
+
+Abrir en el navegador:
+
+```text
+http://localhost:8080
+```
+
+Si ya existen contenedores con esos nombres, se pueden eliminar antes:
+
+```bash
+docker rm -f clima_db clima_app
+```
 
 ## Imagen de la base de datos
 
@@ -277,31 +354,72 @@ El proyecto utiliza GitHub Actions para automatizar:
 
 Cada push al repositorio ejecuta automáticamente el pipeline.
 
-## Estructura del proyecto
 
-El proyecto sigue una arquitectura por capas de Spring Boot, permitiendo separar responsabilidades y mantener el código organizado.
+## Imagen Docker
 
+Imagen publicada:
+
+```text
+patracamiguel/clima-api:4.0
+patracamiguel/clima-api:latest
 ```
-clima-api/
-├── src/
-│   ├── main/java/com/parde4/climaapi/
-│   │   ├── controller/  
-│   │   ├── dto/            
-│   │   ├── exception/     
-│   │   ├── model/          
-│   │   ├── repository/   
-│   │   ├── service/        
-│   │   └── ClimaApiApplication.java 
-│   │
-│   ├── resources/
-│   │   └── application.yaml 
-│
-│   ├── test/              
-│
-├── docker-compose.yml     
-├── pom.xml          
-├── README.md
+
+La version `4.0` es la version fija recomendada para el equipo. La etiqueta `latest` apunta actualmente a la misma version.
+
+La imagen fue publicada como multi-arquitectura:
+
+```text
+linux/amd64
+linux/arm64
 ```
+
+Esto permite ejecutarla en Linux y Mac
 
 ## Imagen en DockerHub
 https://hub.docker.com/repositories/patracamiguel
+
+## Variables de entorno
+
+La aplicación usa las siguientes variables:
+
+```text
+SPRING_DATASOURCE_URL
+SPRING_DATASOURCE_USERNAME
+SPRING_DATASOURCE_PASSWORD
+WEATHER_API_KEY
+```
+
+En Docker Compose se usan valores por defecto para desarrollo local. Si se desea personalizar la configuracion, se puede crear un archivo `.env` tomando como referencia:
+
+```text
+.env.example
+```
+
+Ejemplo:
+
+```text
+DB_PASSWORD=parde4
+WEATHER_API_KEY=tu_api_key_de_openweathermap
+```
+
+---
+
+## Pruebas
+
+Para ejecutar todas las pruebas:
+
+```bash
+mvn test
+```
+
+Ejecutar pruebas de recomendaciones:
+
+```bash
+mvn -Dtest=RecomendacionesControllerTest test
+```
+
+En la ultima verificacion se ejecutaron 68 pruebas correctamente.
+
+---
+
+

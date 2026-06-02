@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "b9c70768-40a2-41e2-95b4-6c9db74f9041",
     "name": "Clima API",
-    "description": "Coleccion de endpoints de Clima API. Configura `baseUrl` si la app no corre en localhost:8080. Los endpoints de clima, recomendaciones, favoritos e historial requieren iniciar sesion primero con Auth > Login.",
+    "description": "Esta es nuestra colección de endpoints de Clima-API. Configura `baseUrl` si la app no corre en localhost:8080. Para usar los endpoints de clima, recomendaciones, favoritos e historial se necesita iniciar sesion primero con Auth > Login.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
