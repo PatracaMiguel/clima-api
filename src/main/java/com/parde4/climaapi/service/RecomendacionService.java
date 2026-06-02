@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecomendacionService {
 
+    private static final double VELOCIDAD_VIENTO_FUERTE = 10.0;
+
+    private static final String MODIFICADOR_LLUVIA = "Alerta de lluvia: Asegúrate de llevar un paraguas resistente y una chamarra impermeable con capucha. Usa calzado impermeable.";
+    private static final String MODIFICADOR_NIEVE = "Alerta de nieve: Usa ropa impermeable resistente al agua para que la nieve no te moje al derretirse. Usa botas con suela antideslizante para evitar resbalones en el hielo.";
+    private static final String MODIFICADOR_VIENTO = "Alerta de viento: Te recomendamos usar una chaqueta rompevientos y evitar faldas o vestidos. Si tienes el cabello largo usa una liga o pinza.";
+
     @Autowired
     private WeatherService weatherService;
 
@@ -25,108 +31,72 @@ public class RecomendacionService {
         recomendacion.setClima(clima);
         recomendacion.setDescripcion(descripcion);
 
-        RecomendacionPorClima recomendacionClima = recomendacionPorClima(clima);
-        RecomendacionPorTemperatura recomendacionTemperatura = recomendacionPorTemperatura(temperatura);
+        String recomendacionTemperatura = recomendacionPorTemperatura(temperatura);
+        String modificadores = modificadoresPorClima(clima, climaCiudad);
 
-        recomendacion.setRecomendacionRopa(recomendacionClima.ropa());
-        recomendacion.setRecomendacionAccesorios(recomendacionClima.accesorios());
-        recomendacion.setMensaje(recomendacionClima.mensaje() + " " + recomendacionTemperatura.mensaje());
+        recomendacion.setRecomendacionRopa(recomendacionTemperatura);
+        recomendacion.setRecomendacionAccesorios(modificadores);
+        recomendacion.setMensaje(modificadores);
 
         return recomendacion;
     }
 
-    private RecomendacionPorClima recomendacionPorClima(String clima) {
-        if (clima.equalsIgnoreCase("Rain") || clima.equalsIgnoreCase("Drizzle")) {
-            return new RecomendacionPorClima(
-                    "Usa impermeable o chamarra resistente al agua, pantalon que seque rapido y botas de lluvia o zapatos cerrados con suela antideslizante.",
-                    "Lleva sombrilla, mochila impermeable, una bolsa para proteger celular o documentos y una muda ligera si vas a estar mucho tiempo fuera.",
-                    "Hay lluvia; sal con tiempo, evita zonas encharcadas y cuida los cambios de temperatura.");
+    private String recomendacionPorTemperatura(double temperatura) {
+        if (temperatura < 0) {
+            return "Hace un frío extremo afuera. Usa ropa térmica seguido de un suéter grueso de lana y un abrigo térmico o parka impermeable. Usar pantalones abrigados, botas con suela antideslizante, gorro, bufanda y guantes impermeables.";
         }
 
-        if (clima.equalsIgnoreCase("Thunderstorm")) {
-            return new RecomendacionPorClima(
-                    "Usa impermeable, ropa comoda de secado rapido y calzado cerrado con buena suela.",
-                    "Lleva sombrilla resistente, mochila impermeable, linterna pequena y evita cargar objetos metalicos expuestos.",
-                    "Hay tormenta; si puedes, espera a que baje la intensidad y evita resguardarte debajo de arboles.");
+        if (temperatura <= 12) {
+            return "El día está bastante frío. Te recomendamos usar una camiseta de manga larga, un suéter o sudadera, y una chamarra, combínalo con jeans gruesos, botas o tenis cerrados de piel. Usar un gorro ligero y una bufanda.";
         }
 
-        if (clima.equalsIgnoreCase("Clear")) {
-            return new RecomendacionPorClima(
-                    "Usa ropa fresca, ligera y de colores claros; una playera de algodon o lino y pantalon ligero funcionan bien.",
-                    "Lleva lentes de sol, gorra o sombrero, protector solar y una botella de agua.",
-                    "El cielo esta despejado; aprovecha el dia, pero protege tu piel y mantente hidratado.");
+        if (temperatura <= 20) {
+            return "El clima está fresco y agradable. Te recomendamos usar prendas fáciles de quitar y poner por si cambia el día. Una playera o camisa combinada con una chaqueta ligera como una chamarra de mezclilla o un blazer. Usa jeans o pantalones casuales y tenis.";
         }
 
-        if (clima.equalsIgnoreCase("Clouds")) {
-            return new RecomendacionPorClima(
-                    "Usa ropa comoda en capas: playera ligera y una chamarra delgada por si baja la temperatura.",
-                    "Lleva lentes de sol si hay resolana y una sombrilla compacta si las nubes se ven densas.",
-                    "El clima esta nublado; conviene salir preparado por si cambia durante el dia.");
+        if (temperatura <= 28) {
+            return "Es un día cálido. Te recomendamos usar ropa fresca y transpirable de algodón o lino: playeras de manga corta, blusas ligeras, bermudas, shorts o vestidos cómodos. Usar tenis ligeros o sandalias, llevar tus lentes de sol y una gorra, si vas a caminar bajo el sol usa protector solar.";
         }
 
-        if (clima.equalsIgnoreCase("Snow")) {
-            return new RecomendacionPorClima(
-                    "Usa ropa termica, sueter grueso, chamarra abrigadora, pantalon resistente al frio y botas.",
-                    "Lleva guantes, gorro, bufanda, calcetines termicos y protector labial.",
-                    "Hay nieve; abrigate bien y camina con cuidado en superficies resbalosas.");
-        }
-
-        if (clima.equalsIgnoreCase("Mist") || clima.equalsIgnoreCase("Fog") || clima.equalsIgnoreCase("Haze")) {
-            return new RecomendacionPorClima(
-                    "Usa ropa comoda y una chamarra ligera si hay humedad o baja visibilidad.",
-                    "Lleva cubrebocas si hay bruma, luces o reflejantes si caminas, y maneja con precaucion.",
-                    "Hay niebla o bruma; reduce la velocidad, manten distancia y evita zonas con poca visibilidad.");
-        }
-
-        return new RecomendacionPorClima(
-                "Usa ropa comoda adecuada para salir durante el dia y considera llevar una capa extra por si cambia el clima.",
-                "Lleva agua, protector solar basico y revisa el clima nuevamente antes de salir.",
-                "El clima puede variar; sal preparado para cambios repentinos.");
+        return "Calor extremo, te recomendamos mantenerte fresco con ropa muy holgada y de telas ultraligeras, preferentemente en colores claros para no absorber el calor. Usar shorts, faldas y playeras de tirantes, junto con sandalias abiertas. Es obligatorio usar protector solar, lentes de sol y una gorra.";
     }
 
-    private RecomendacionPorTemperatura recomendacionPorTemperatura(double temperatura) {
-        if (temperatura >= 40) {
-            return new RecomendacionPorTemperatura(
-                    "La temperatura es extremadamente alta: evita el sol directo, usa ropa muy ligera y transpirable, toma agua constantemente y busca sombra o lugares ventilados.");
+    private String modificadoresPorClima(String clima, WeatherResponseDTO climaCiudad) {
+        StringBuilder modificadores = new StringBuilder();
+
+        if (esLluvioso(clima)) {
+            modificadores.append(MODIFICADOR_LLUVIA);
         }
 
-        if (temperatura >= 35) {
-            return new RecomendacionPorTemperatura(
-                    "Hace mucho calor: usa ropa suelta y fresca, protector solar, lentes de sol, gorra y evita actividad pesada al aire libre.");
+        if (esNevado(clima)) {
+            agregarModificador(modificadores, MODIFICADOR_NIEVE);
         }
 
-        if (temperatura >= 30) {
-            return new RecomendacionPorTemperatura(
-                    "El dia esta caluroso: usa ropa ligera, colores claros, lentes de sol y toma agua durante el dia.");
+        if (hayVientoFuerte(climaCiudad)) {
+            agregarModificador(modificadores, MODIFICADOR_VIENTO);
         }
 
-        if (temperatura >= 24) {
-            return new RecomendacionPorTemperatura(
-                    "La temperatura es calida y agradable: usa ropa ligera, pero no olvides protector solar si estaras al aire libre.");
-        }
-
-        if (temperatura >= 18) {
-            return new RecomendacionPorTemperatura(
-                    "El clima esta fresco: usa ropa comoda y lleva una chamarra ligera si estaras fuera por la tarde o noche.");
-        }
-
-        if (temperatura >= 10) {
-            return new RecomendacionPorTemperatura(
-                    "Hace frio: lleva sueter o chamarra, pantalon largo y calzado cerrado para evitar cambios bruscos de temperatura.");
-        }
-
-        if (temperatura >= 0) {
-            return new RecomendacionPorTemperatura(
-                    "Hace frio intenso: usa chamarra gruesa, sueter, pantalon largo, calcetines abrigadores y calzado cerrado.");
-        }
-
-        return new RecomendacionPorTemperatura(
-                "La temperatura esta bajo cero: usa varias capas de ropa, abrigo grueso, guantes, gorro y bufanda.");
+        return modificadores.toString();
     }
 
-    private record RecomendacionPorClima(String ropa, String accesorios, String mensaje) {
+    private boolean esLluvioso(String clima) {
+        return clima.equalsIgnoreCase("Rain")
+                || clima.equalsIgnoreCase("Drizzle")
+                || clima.equalsIgnoreCase("Thunderstorm");
     }
 
-    private record RecomendacionPorTemperatura(String mensaje) {
+    private boolean esNevado(String clima) {
+        return clima.equalsIgnoreCase("Snow");
+    }
+
+    private boolean hayVientoFuerte(WeatherResponseDTO climaCiudad) {
+        return climaCiudad.getWind() != null && climaCiudad.getWind().getSpeed() >= VELOCIDAD_VIENTO_FUERTE;
+    }
+
+    private void agregarModificador(StringBuilder modificadores, String modificador) {
+        if (!modificadores.isEmpty()) {
+            modificadores.append(" ");
+        }
+        modificadores.append(modificador);
     }
 }
